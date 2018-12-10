@@ -1,5 +1,5 @@
 # RIFT
-Backend for hub located at uscgacyber.net
+Backend for hub located at <https://uscgacyber.net>.
 
 In development. Limited usage instructions.
 
