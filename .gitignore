@@ -1,0 +1,11 @@
+# venv
+env/
+venv/
+riftenv/
+
+# vs
+.vs/
+
+# subl
+*.sublime-workspace
+*.sublime-project
