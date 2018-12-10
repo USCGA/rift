@@ -8,6 +8,6 @@ In development. Limited usage instructions.
 ..* Python Module: redis
 
 Use the venv for development:
-'''bash
+```bash
 source /riftenv/bin/activate
-'''
+```
