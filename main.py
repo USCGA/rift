@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template
+from flask import Flask, render_template, Markup
 import redis, sys
 app = Flask(__name__)
 
@@ -23,7 +23,10 @@ except:
 
 @app.route("/")
 def root():
-    return render_template('base.html', title="USCGA CYBER TEAM", content="Everything seems to be working.", header="OK")
+    title = "USCGA CYBER"
+    header = "OK"
+    content = Markup('<p>Everything seems to be working properly.</p><p>Redis %s</p>') % db.info(section='server')['redis_version']
+    return render_template('base.html', title=title, header=header, content=content)
 
 # EXECUTABLE 
 # (Unnecessary if this file is not the entrypoint)
