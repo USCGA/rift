@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template
 import redis, sys
+from flask import Flask, render_template, Markup
+from lib import nav
+
+# APP CONFIGURATION
 app = Flask(__name__)
+app.jinja_env.line_statement_prefix = '%'
 
 # PARAMETERS
 redis_host = '127.0.0.1'
@@ -19,13 +23,18 @@ except:
 	print("[-] Stopping.")
 	sys.exit()
 
-
-
 @app.route("/")
 def root():
-    return render_template('base.html', title="USCGA CYBER TEAM", content="Everything seems to be working.", header="OK")
+	menu = nav.items
+	return render_template('home.html', menu=menu, db_version=db.info(section='server')['redis_version'])
+
+@app.route("/login")
+def login():
+	menu = nav.items
+	return render_template('login.html', menu=menu, db_version=db.info(section='server')['redis_version'])
 
 # EXECUTABLE 
 # (Unnecessary if this file is not the entrypoint)
+# Keep this here if you're using the Flask development server.
 if __name__ == '__main__':
     app.run()

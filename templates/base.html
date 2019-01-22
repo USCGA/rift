@@ -1,15 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
-    <meta name="author" content="USCGA Cyber">
-    <meta name="description" content="HUB for the United States Coast Guard Academy Cyber Team">
-    <meta name="keywords" content="uscga,cyber,team,hacking,exploits,writeups,git,hub,portal">
-    <link rel="shortcut icon" href="favicon.ico" type="image/favicon.ico">
-</head>
-<body>
-    <h1>{% block header %}{% endblock %}</h1>
-    {% block content %}{% endblock %}
-</body>
+﻿<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>USCGACYBER // {% block title %}{% endblock %}</title>
+		<meta name="author" content="USCGA Cyber">
+		<meta name="description" content="HUB for the United States Coast Guard Academy Cyber Team">
+		<meta name="keywords" content="uscga,cyber,team,hacking,exploits,writeups,git,hub,portal">
+		<link rel="shortcut icon" href="favicon.ico" type="image/favicon.ico">
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}">
+	</head>
+	<body>
+		<div id="header">USCGA CYBER</div>
+		<div id="topnav">{% block menu %}{% endblock %}</div>
+		<div id="content">{% block content %}{% endblock %}</div>
+		<div id="footer">{% block footer %}{% endblock %}</div>
+	</body>
 </html>

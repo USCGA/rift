@@ -5,3 +5,7 @@ riftenv/
 
 # vs
 .vs/
+
+# subl
+*.sublime-workspace
+*.sublime-project
