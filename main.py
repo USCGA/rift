@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask
+from flask import Flask, render_template
 import redis, sys
 app = Flask(__name__)
 
@@ -23,7 +23,7 @@ except:
 
 @app.route("/")
 def root():
-    return "OK"
+    return render_template('base.html', title="USCGA CYBER TEAM", content="Everything seems to be working.", header="OK")
 
 # EXECUTABLE 
 # (Unnecessary if this file is not the entrypoint)
