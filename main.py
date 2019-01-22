@@ -25,7 +25,7 @@ except:
 def root():
     title = "USCGA CYBER"
     header = "OK"
-    content = Markup('<p>Everything seems to be working properly.</p><p>Redis %s</p>') % db.info(section='server')['redis_version']
+    content = Markup('<p>Everything seems to be working properly.</p>\n    <p>Redis %s</p>') % db.info(section='server')['redis_version']
     return render_template('base.html', title=title, header=header, content=content)
 
 # EXECUTABLE 
