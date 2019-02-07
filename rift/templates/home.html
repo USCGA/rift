@@ -13,7 +13,10 @@
 {% block content %}
 <h1>Home</h1>
 <p>Everything seems to be working normally.</p>
-<p>Redis {{ db_version }}</p>
+<h3>Messages:</h3>
+% for motd in Motd.objects
+<p><b>{{ motd.title }}</b> // {{ motd.date_created }}<br>{{ motd.message }}</p>
+% endfor
 {% endblock %}
 
 {% block footer %}

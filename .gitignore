@@ -1,6 +1,8 @@
 # venv
 env/
+.env/
 venv/
+.venv/
 riftenv/
 
 # vs
