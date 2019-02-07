@@ -1,37 +1,38 @@
 #!/usr/bin/env python3
-import redis, sys
+import sys
 from flask import Flask, render_template, Markup
 from lib import nav
+from flask_mongoengine import MongoEngine
+from flask_security import Security, MongoEngineUserDatastore, \
+	UserMixin, RoleMixin, login_required
 
-# APP CONFIGURATION
+# App Configuration
 app = Flask(__name__)
 app.jinja_env.line_statement_prefix = '%'
+app.config['DEBUG'] = True
+app.config['SECRET_KEY'] = 'salt'
 
-# PARAMETERS
-redis_host = '127.0.0.1'
-redis_port = 6379
+# MongoDB Config
+app.config['MONGODB_DB'] = 'rift'
+app.config['MONGODB_HOST'] = 'localhost'
+app.config['MONGODB_PORT'] = 27017
+
+
+# Create database connection object
+db = MongoEngine(app)
 
 print("[+] Starting portal.")
 
-# REDIS Connection
-db = redis.Redis(host=redis_host, port=redis_port)
-print("[i] Connecting to redis server at " + redis_host + ":" + str(redis_port) + ".")
-try:
-	print("[+] Connected: Redis v" + db.info(section='server')['redis_version']);
-except:
-	print("[-] Could not establish connection to redis. Check config.")
-	print("[-] Stopping.")
-	sys.exit()
 
 @app.route("/")
 def root():
 	menu = nav.items
-	return render_template('home.html', menu=menu, db_version=db.info(section='server')['redis_version'])
+	return render_template('home.html', menu=menu, db_version="Disconnected")
 
 @app.route("/login")
 def login():
 	menu = nav.items
-	return render_template('login.html', menu=menu, db_version=db.info(section='server')['redis_version'])
+	return render_template('login.html', menu=menu, db_version="Disconnected")
 
 # EXECUTABLE 
 # (Unnecessary if this file is not the entrypoint)

@@ -1,2 +1,4 @@
 Flask
 redis
+flask-security
+flask-mongoengine
