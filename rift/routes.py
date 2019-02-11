@@ -13,7 +13,7 @@ def root():
 @main.route("/login", methods=['GET','POST'])
 def login():
 	if request.method == 'POST':
-		return "LOGIN! " + request.authorization['username']
+		return "LOGIN! " + request.form['uname']
 	else:
 		menu = nav.items
 		return render_template('login.html', menu=menu)
