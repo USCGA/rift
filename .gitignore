@@ -1,4 +1,3 @@
-# Environments
 # venv
 env/
 .env/
@@ -6,11 +5,12 @@ venv/
 .venv/
 riftenv/
 
-# Editors
 # vs
 .vs/
+
 # vscode
 .vscode/
+
 # subl
 *.sublime-workspace
 *.sublime-project
