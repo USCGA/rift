@@ -8,6 +8,9 @@ riftenv/
 # vs
 .vs/
 
+# vscode
+.vscode/
+
 # subl
 *.sublime-workspace
 *.sublime-project
