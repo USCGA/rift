@@ -3,6 +3,14 @@ Backend for hub located at <https://uscgacyber.net>.
 
 In development. Limited usage instructions.
 
-* Important dependencies:
-  * Python Module: Flask (development server included)
-  * Python Module: redis
+Create virtualenv:
+`python3 -m virtualenv env`
+
+Activate virtualenv:
+`source env/bin/activate`
+
+Install Dependencies:
+`pip install -r requirements.txt`
+
+Run development server:
+`python run_server.py`
