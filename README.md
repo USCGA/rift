@@ -1,4 +1,7 @@
 # RIFT
+
+![banner](https://raw.githubusercontent.com/USCGA/rift/development/documentation/cover.png)
+
 Backend for hub located at <https://uscgacyber.net>.
 
 In development. Limited instructions.
