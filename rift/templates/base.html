@@ -12,7 +12,10 @@
 	</head>
 	<body>
 		<div id="header">USCGA CYBER</div>
-		<div id="topnav">{% block menu %}{% endblock %}</div>
+		<div id="topnav">
+			{% block menu %}{% endblock %}
+			<i style="color:grey">{{ login_status }}</i>
+		</div>
 		<div id="content">{% block content %}{% endblock %}</div>
 		<div id="footer">{% block footer %}{% endblock %}</div>
 	</body>

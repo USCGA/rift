@@ -1,11 +1,26 @@
-﻿from flask import Flask, render_template, Markup
+﻿from flask import Flask, render_template, Markup, session
 from rift.routes import main
 from rift.models import Motd
 import rift.db
+import secrets
 
 
 app = Flask(__name__)
 db = rift.db.connection
+
+# Read/Generate secret key.
+try:
+	f = open("secret.key", 'r')
+	app.secret_key = f.read()
+	f.close()
+except FileNotFoundError:
+	g = open("secret.key", 'w')
+	app.secret_key = secrets.token_hex(16)
+	g.write(app.secret_key)
+	g.close
+except:
+	print("[x] Something has gone wrong reading/writing the app.secret_key. Check file permissions.")
+	raise
 
 # App Configuration
 app.jinja_env.line_statement_prefix = '%'

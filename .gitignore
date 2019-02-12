@@ -17,3 +17,6 @@ riftenv/
 # subl
 *.sublime-workspace
 *.sublime-project
+
+# App Secret
+secret.key
