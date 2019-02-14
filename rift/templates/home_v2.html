@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<style>
+body {
+background-color:#262626;
+font-family:"Lucida Console", Monaco, monospace
+}
+
+div {
+margin: 30px auto
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: nowrap; /* assumes you only want one row */
+}
+
+h1 {
+font-weight:bold
+}
+
+a {
+color:white;
+
+}
+</style>
+</head>
+<body>
+
+<div style="width:500px; margin: 30% auto; text-align:center; color:white">
+	<img width="200px" height="200px" style="display:block;margin:auto">
+	<h1>USCGA CYBER</h1>
+    <div><a href="">Login</a></div>
+    <div id='prompt'><span style="color:#FFCE9F">{{user}}</span>@<span style="color:#7EA6E0">uscgacyber</span><span style="color:#CCCCCC">:~</span>${{page}}</div>
+    <div class='navbar'>
+    	<ul>
+        	<li><a href="">Home</a></li>
+            <li><a href="">Learn</a></li>
+            <li><a href="">Play</a></li>
+            <li><a href="">Team</a></li>
+            <li><a href="">Shell</a></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
