@@ -7,7 +7,21 @@ class MenuItem:
 		self.name = name
 		self.url = url
 
+# Default Menu
 Home = MenuItem("Home", "/")
-Login = MenuItem("Login", "/login")
+Learn = MenuItem("Learn", "#") # Unimplemented
+Play = MenuItem("Play", "#") # Unimplemented
+Team = MenuItem("Team", "#") # Unimplemented
+Contact = MenuItem("Contact", "#") # Unimplemented
 
-items = [Home, Login]
+# Admin
+Admin = MenuItem("Admin", "#") # Unimplemented
+
+# Session Management
+Login = MenuItem("Login", "/login")
+Logout = MenuItem("Logout", "/logout")
+
+
+# ----- MENUS ------
+default_menu = [Home, Learn, Play, Team, Contact]
+admin_menu = default_menu + [Admin]

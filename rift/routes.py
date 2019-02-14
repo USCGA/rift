@@ -8,17 +8,29 @@ import rift.models as models
 # which is applied to flask.app in __init__.py.
 main = Blueprint("pages", __name__)
 
+
+# Simple Config
+# Variables we might want to change later.
+default_screenname = "guest"
+
 ### ROUTES ###
 
 @main.route("/")
 def index():
-	login_status = login_status_string(session)
-	menu = nav.items
-	return render_template('home.html', menu=menu, Motd=models.Motd, login_status=login_status)
+	# Change screenname and session_button based on login status.
+	if logged_in(session):
+		logged_user = user_info(session)
+	screenname = (logged_user.username.lower() if logged_in(session) else default_screenname)
+	session_button = (nav.Logout if logged_in(session) else nav.Login)
+
+	menu = nav.default_menu # The default menu is always displayed right now.
+	return render_template('home_v2.html', menu=menu, screenname=screenname, session_button=session_button)
 
 @main.route("/login", methods=['GET','POST'])
 def page_login():
-	login_status = login_status_string(session)
+	if logged_in(session):
+		logged_user = user_info(session)
+	screenname = (logged_user.username.lower() if logged_in(session) else default_screenname)
 	# TODO Add validation to email/uname/pword.
 	if request.method == 'POST':
 		if request.form['type'] == "login": # ----------- LOGIN
@@ -32,19 +44,30 @@ def page_login():
 			register_user(uname, email, pword)
 		return redirect(url_for("pages.index"))
 	if request.method == 'GET':
-		menu = nav.items
-		return render_template('login.html', menu=menu, login_status=login_status)
+		menu = nav.default_menu
+		return render_template('login.html', menu=menu, user=screenname)
+
+@main.route("/logout")
+def page_logout():
+	session.clear()
+	return redirect(url_for('pages.index'))
 
 
 ### FUNCTIONS ###
 
-def login_status_string(session):
+def logged_in(session):
+	if 'username' in session:
+		return True
+	else:
+		return False
+
+def user_info(session):
 	# Check if valid session.
 	if 'username' in session:
-		status = 'Logged in as %s' % escape(session['username'])
+		user = models.User.objects.get(username=session['username'])
+		return user
 	else:
-		status = 'You are not logged in.'
-	return status
+		return False
 
 def login_user(username, password):
 	'''

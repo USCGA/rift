@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+<title>USCGA CYBER</title>
 <style>
 body {
 background-color:#262626;
@@ -33,18 +33,16 @@ color:white;
 </head>
 <body>
 
-<div style="width:500px; margin: 30% auto; text-align:center; color:white">
+<div style="width:500px; margin: 200px auto; text-align:center; color:white">
 	<img width="200px" height="200px" style="display:block;margin:auto">
 	<h1>USCGA CYBER</h1>
-    <div><a href="">Login</a></div>
-    <div id='prompt'><span style="color:#FFCE9F">{{user}}</span>@<span style="color:#7EA6E0">uscgacyber</span><span style="color:#CCCCCC">:~</span>${{page}}</div>
+    <div><a href="{{ session_button.url }}">{{ session_button.name }}</a></div>
+    <div id='prompt'><span style="color:#FFCE9F">{{screenname}}</span>@<span style="color:#7EA6E0">uscgacyber</span><span style="color:#CCCCCC">:~</span>${{page}}</div>
     <div class='navbar'>
     	<ul>
-        	<li><a href="">Home</a></li>
-            <li><a href="">Learn</a></li>
-            <li><a href="">Play</a></li>
-            <li><a href="">Team</a></li>
-            <li><a href="">Shell</a></li>
+        	% for menu_item in menu
+            <li><a href="{{ menu_item.url }}">{{ menu_item.name }}</a></li>
+            % endfor
         </ul>
     </div>
 </div>
