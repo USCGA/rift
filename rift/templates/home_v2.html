@@ -1,51 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>USCGA CYBER</title>
-<style>
-body {
-background-color:#262626;
-font-family:"Lucida Console", Monaco, monospace
-}
+	<head>
+		<title>USCGA CYBER</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tooltip.css') }}"/>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}"/>
+		<script src="{{ url_for('static', filename='js/cmdline.js') }}"></script> 
+	</head>
+	<body>
 
-div {
-margin: 30px auto
-}
+	<div style="width:500px; margin: 200px auto; text-align:center; color:white">
+		<img class="no-select" src="{{ url_for('static', filename='img/logo_white.png') }}" width="250px" height="250px" style="display:block;margin:auto"  ondragstart="return false;">
+		<h1 class="no-select">USCGA CYBER</h1>
+		
+		<!-- Terminal Prompt | Session_Button -->
+		<div style="display: flex">
+			<div style="text-align: left">
+				<div id='prompt'>
+					<span style="color:#FFCE9F">{{screenname}}</span>@<span style="color:#7EA6E0">uscgacyber</span><span style="color:#CCCCCC">:~$</span><span id="prompt-dir"></span>
+				</div>
+			</div>
+			<div style="flex-grow: 1; text-align: left">
+				<form id="cmdline" onsubmit="return executeCmd()">
+						<input id="cmd" type="text" class="prompt-field" placeholder="{{cmd_placeholder}}" autofocus/>
+				</form>
+			</div>
+			<div class="tooltip no-select" style="width:12px; margin-left: 12px">
+				?
+				<span class="tooltiptext">Try 'su [username]'</span>
+			</div>
+		</div>
 
-.navbar ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex-wrap: nowrap; /* assumes you only want one row */
-}
+		<!-- Navigation -->
+		<div class='navbar'>
+			<ul>
+				% for menu_item in menu
+				<li><a href="{{ menu_item.url }}">{{ menu_item.name }}</a></li>
+				% endfor
+			</ul>
+		</div>
+	</div>
 
-h1 {
-font-weight:bold
-}
-
-a {
-color:white;
-
-}
-</style>
-</head>
-<body>
-
-<div style="width:500px; margin: 200px auto; text-align:center; color:white">
-	<img width="200px" height="200px" style="display:block;margin:auto">
-	<h1>USCGA CYBER</h1>
-    <div><a href="{{ session_button.url }}">{{ session_button.name }}</a></div>
-    <div id='prompt'><span style="color:#FFCE9F">{{screenname}}</span>@<span style="color:#7EA6E0">uscgacyber</span><span style="color:#CCCCCC">:~</span>${{page}}</div>
-    <div class='navbar'>
-    	<ul>
-        	% for menu_item in menu
-            <li><a href="{{ menu_item.url }}">{{ menu_item.name }}</a></li>
-            % endfor
-        </ul>
-    </div>
-</div>
-
-</body>
+	</body>
 </html>

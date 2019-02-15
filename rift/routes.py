@@ -24,7 +24,10 @@ def index():
 	session_button = (nav.Logout if logged_in(session) else nav.Login)
 
 	menu = nav.default_menu # The default menu is always displayed right now.
-	return render_template('home_v2.html', menu=menu, screenname=screenname, session_button=session_button)
+	return render_template(
+		'home_v2.html', 
+		menu=menu, 
+		screenname=screenname)
 
 @main.route("/login", methods=['GET','POST'])
 def page_login():
