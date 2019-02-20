@@ -4,6 +4,20 @@
 		<title>USCGA CYBER</title>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tooltip.css') }}"/>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base.css') }}"/>
+
+		<!-- Favicon junk -->
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='favicon/apple-touch-icon.png') }}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+		<link rel="manifest" href="{{ url_for('static', filename='favicon/site.webmanifest') }}">
+		<link rel="mask-icon" href="{{ url_for('static', filename='favicon/safari-pinned-tab.svg') }}" color="#5bbad5">
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+		<meta name="apple-mobile-web-app-title" content="USCGA CYBER">
+		<meta name="application-name" content="USCGA CYBER">
+		<meta name="msapplication-TileColor" content="#2b5797">
+		<meta name="msapplication-config" content="{{ url_for('static', filename='favicons/browserconfig.xml') }}">
+		<meta name="theme-color" content="#ffffff">
+
 		<script src="{{ url_for('static', filename='js/cmdline.js') }}"></script> 
 	</head>
 	<body>
@@ -12,6 +26,17 @@
 		<img class="no-select" src="{{ url_for('static', filename='img/logo_white.png') }}" width="250px" height="250px" style="display:block;margin:auto"  ondragstart="return false;">
 		<h1 class="no-select">USCGA CYBER</h1>
 		
+		<!-- Message flashes -->
+		<div style="background-color: darkred;">
+			{% with messages = get_flashed_messages() %}
+				{% if messages %}
+					{% for message in messages %}
+						<p>{{ message }}</p>
+					{% endfor %}
+				{% endif %}
+			{% endwith %}
+		</div>
+
 		<!-- Terminal Prompt | Session_Button -->
 		<div style="display: flex">
 			<div style="text-align: left">
@@ -21,7 +46,7 @@
 			</div>
 			<div style="flex-grow: 1; text-align: left">
 				<form id="cmdline" onsubmit="return executeCmd()">
-						<input id="cmd" type="text" class="prompt-field" placeholder="{{cmd_placeholder}}" autofocus/>
+					<input id="cmd" type="text" class="prompt-field" placeholder="{{cmd_placeholder}}" autofocus/>
 				</form>
 			</div>
 			<div class="tooltip no-select" style="width:12px; margin-left: 12px">
