@@ -78,6 +78,9 @@ def page_logout():
 	session.clear()
 	return redirect(url_for('pages.index'))
 
+@main.route("/control")
+def page_control():
+	return render_template('blank.html', menu=nav.menu_main)
 
 ### FUNCTIONS ###
 
