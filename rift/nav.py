@@ -15,10 +15,11 @@ class MenuSubSection:
 		self.items = items
 
 class MenuSection:
-	def __init__(self, name, id, subsections):
+	def __init__(self, name, id, fa_icon, subsections):
 		"""Menu items are sorted into sections"""
 		self.name = name
 		self.id = id # Used for template targetdata
+		self.fa_icon = fa_icon
 		self.subsections = subsections
 
 class MenuCategory:
@@ -34,11 +35,11 @@ class Menu:
 
 
 # Default Menu
-Home = MenuItem("Home", "/")
-Learn = MenuItem("Learn", "/control")
-Play = MenuItem("Play", "#") # Unimplemented
-Team = MenuItem("Team", "#") # Unimplemented
-Contact = MenuItem("Contact", "#") # Unimplemented
+Home = MenuItem("Home", "/dashboard")
+Learn = MenuItem("Learn", "/dashboard")
+Play = MenuItem("Play", "/dashboard") # Unimplemented
+Team = MenuItem("Team", "/dashboard") # Unimplemented
+Contact = MenuItem("Contact", "/dashboard") # Unimplemented
 
 # Admin
 Admin = MenuItem("Admin", "#") # Unimplemented
@@ -46,6 +47,9 @@ Admin = MenuItem("Admin", "#") # Unimplemented
 # Session Management
 Login = MenuItem("Login", "/login")
 Logout = MenuItem("Logout", "/logout")
+
+# Dummy
+Dummy = MenuItem("MenuItem", "#")
 
 # ----- MENU ITEM Collections ------
 default_menu = [Home, Learn, Play, Team, Contact]
@@ -56,12 +60,24 @@ admin_menu = default_menu + [Admin]
 
 # ----- MENU SUBSECTIONS -----
 subsection_login = MenuSubSection("Login / Logout", [Login, Logout])
+subsection_latest = MenuSubSection("Latest",[Dummy])
+subsection_inhouse = MenuSubSection("In House", [Dummy])
+subsection_curated = MenuSubSection("Curated", [Dummy])
+subsection_skilltree = MenuSubSection("Skill Tree", [Dummy])
+subsection_announcements = MenuSubSection("Announcements", [Dummy])
+subsection_accountsettings = MenuSubSection("Account Settings", [Dummy])
 
 # ----- MENU SECTIONS -----
-section_session = MenuSection("Session", "section_session", [subsection_login])
+section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_announcements])
+section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection_latest, subsection_inhouse, subsection_curated])
+section_skills = MenuSection("Skills", "section_skills", "fa-flask", [subsection_skilltree])
+section_account = MenuSection("Account", "section_account", "fa-address-card", [subsection_accountsettings, subsection_login])
 
 # ----- MENU CATEGORY -----
-category_options = MenuCategory("Options", [section_session])
+category_bulletin = MenuCategory("Bulletin", [section_posts])
+category_play = MenuCategory("Play", [section_ctf])
+category_learn = MenuCategory("Learn", [section_skills])
+category_options = MenuCategory("Options", [section_account])
 
 # ----- MENUS -----
-menu_main = Menu([category_options])
+menu_main = Menu([category_bulletin, category_play, category_learn, category_options])

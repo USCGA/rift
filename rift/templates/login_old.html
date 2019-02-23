@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block header %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block title %}Login{% endblock %}
+
+{% block menu %}
+<ul>
+% for menu_item in menu
+	<li><a href="{{ menu_item.url }}">{{ menu_item.name }}</a></li>
+% endfor
+</ul>
+{% endblock %}
+
+{% block content %}
+<input type='checkbox' id='form-switch'>
+<form id='login-form' action="" method='post'>
+	<input name="type" type="hidden" value="login">
+	<input type="text" placeholder="Username" name="uname" required>
+	<input type="password" placeholder="Password" name="pword" required>
+	<button type='submit'>Login</button>
+	<label for='form-switch'><span>Register</span></label>
+</form>
+<form id='register-form' action="" method='post'>
+	<input name="type" type="hidden" value="register">
+	<input type="text" placeholder="Username" name="uname" required>
+	<input type="email" placeholder="Email" name ="email" required>
+	<input type="password" placeholder="Password" name="pword" required>
+	<input type="password" placeholder="Re Password" required>
+	<button type='submit'>Register</button>
+	<label for='form-switch'>Sign In</label>
+</form>
+{% endblock %}
+
+{% block footer %}
+&copy; 2020 <a href="https://uscgacyber.net/">USCGA CYBER</a>.
+{% endblock %}

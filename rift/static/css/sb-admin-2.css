@@ -6991,6 +6991,27 @@ button.bg-dark:focus {
   background-color: #fff !important;
 }
 
+/* CHANGE */
+.bg-miami-1 {
+  background-color: #191d32 !important;
+}
+
+.bg-miami-2 {
+  background-color: #282f44 !important;
+}
+
+.bg-miami-3 {
+  background-color: #453a49 !important;
+}
+
+.bg-miami-4 {
+  background-color: #6d3b47 !important;
+}
+
+.bg-miami-5 {
+  background-color: #f5e3e0 !important;
+}
+
 .bg-transparent {
   background-color: transparent !important;
 }
@@ -10573,7 +10594,7 @@ a:focus {
 }
 
 #wrapper #content-wrapper {
-  background-color: #f8f9fc;
+  background-color: #191d32;
   width: 100%;
   overflow-x: hidden;
 }
@@ -10684,6 +10705,14 @@ a:focus {
   background-size: cover;
 }
 
+/* CHANGE */
+.bg-gradient-miami {
+  background-color: #191d32;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #191d32), to(#453a49));
+  background-image: linear-gradient(180deg, #191d32 10%, #453a49 100%);
+  background-size: cover;
+}
+
 .bg-gradient-success {
   background-color: #1cc88a;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #1cc88a), to(#13855c));
@@ -10781,7 +10810,8 @@ a:focus {
 }
 
 .text-gray-600 {
-  color: #858796 !important;
+  /* CHANGE color: #858796 !important;*/
+  color: #f5e3e0 !important;
 }
 
 .text-gray-700 {
@@ -10789,11 +10819,12 @@ a:focus {
 }
 
 .text-gray-800 {
-  color: #5a5c69 !important;
+  /* CHANGE color: #5a5c69 !important;*/
+  color: var(--white) !important;
 }
 
 .text-gray-900 {
-  color: #3a3b45 !important;
+  color: var(--white) !important;
 }
 
 .icon-circle {
@@ -10945,7 +10976,8 @@ a:focus {
 
 .topbar .topbar-divider {
   width: 0;
-  border-right: 1px solid #e3e6f0;
+  /*  border-right: 1px solid #e3e6f0; CHANGE */
+  border-right: 1px solid #191d32;
   height: calc(4.375rem - 2rem);
   margin: auto 1rem;
 }
@@ -11589,7 +11621,7 @@ a:focus {
 }
 
 .bg-login-image {
-  background: url("https://source.unsplash.com/K4mSJ7kc0As/600x800");
+  background: url("https://www.ct.gov/oma/lib/oma/cgas_cyber_team_practice_in_the_cyber_lab.jpg");
   background-position: center;
   background-size: cover;
 }

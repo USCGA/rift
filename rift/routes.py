@@ -1,7 +1,8 @@
 ﻿from flask import Blueprint, render_template, request, \
-	escape, session, redirect, url_for, flash, Response
+	escape, session, redirect, url_for, flash, Response, g
 from mongoengine import Document, DoesNotExist, MultipleObjectsReturned, NotUniqueError, ValidationError
 from passlib.hash import pbkdf2_sha256
+from functools import wraps
 from enum import Enum
 import rift.nav as nav
 import rift.models as models
@@ -34,53 +35,73 @@ class RegisterStatus(Enum):
 	bad_validation = 4
 	not_unique = 5
 
+### DECORATORS ###
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if g.user is None:
+            return redirect(url_for('pages.login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 ### ROUTES ###
 
-@main.route("/")
-def index():
-	# Change screenname and session_button based on login status.
-	if logged_in(session):
-		logged_user = user_info(session)
-	screenname = (logged_user.username.lower() if logged_in(session) else default_screenname)
-	session_button = (nav.Logout if logged_in(session) else nav.Login)
+@main.before_request
+def get_user():
+	if 'user' not in g:
+		if 'username' in session:
+			g.user = user_info(session)
+			return
+		else:
+			g.user = None
+			return
+	else:
+		return
 
-	menu = nav.default_menu # The default menu is always displayed right now.
+@main.route("/")
+def home():
+	screenname = g.user.username.lower() if g.user is not None else default_screenname
 	return render_template(
 		'home_v2.html', 
-		menu=menu, 
+		menu=nav.default_menu, 
 		screenname=screenname)
 
+@main.route("/dashboard")
+@login_required
+def dashboard():
+	return render_template('blank.html', menu=nav.menu_main, user=g.user)
+
 @main.route("/login", methods=['GET','POST'])
-def page_login():
-	if logged_in(session):
-		logged_user = user_info(session)
-	screenname = (logged_user.username.lower() if logged_in(session) else default_screenname)
-	# TODO Add validation to email/uname/pword.
+def login():
+	if g.user is not None:
+		return redirect(url_for('pages.dashboard'))
+	# POST
 	if request.method == 'POST':
 		if request.form['type'] == "login": # ----------- LOGIN
 			uname = request.form['uname']
 			pword = request.form['pword']
 			result = login_user(uname, pword)
 			
+			if (result == LoginStatus.success):
+				return redirect(url_for('pages.dashboard'))
+
 		elif request.form['type'] == "register": # ------ REGISTER
 			uname = request.form['uname']
 			email = request.form['email']
 			pword = request.form['pword']
 			result = register_user(uname, email, pword)
 
-		return Response(status=200)
+		return render_template('login.html')
+	# GET
 	if request.method == 'GET':
-		menu = nav.default_menu
-		return render_template('login.html', menu=menu, user=screenname)
+		return render_template('login.html', menu=nav.default_menu)
 
 @main.route("/logout")
-def page_logout():
+def logout():
 	session.clear()
-	return redirect(url_for('pages.index'))
-
-@main.route("/control")
-def page_control():
-	return render_template('blank.html', menu=nav.menu_main)
+	return redirect(url_for('pages.home'))
 
 ### FUNCTIONS ###
 
