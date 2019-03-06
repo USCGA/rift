@@ -83,20 +83,37 @@ def login():
 			uname = request.form['uname']
 			pword = request.form['pword']
 			result = login_user(uname, pword)
-			
 			if (result == LoginStatus.success):
 				return redirect(url_for('pages.dashboard'))
-
-		elif request.form['type'] == "register": # ------ REGISTER
-			uname = request.form['uname']
-			email = request.form['email']
-			pword = request.form['pword']
-			result = register_user(uname, email, pword)
-
-		return render_template('login.html')
+			else:
+				return render_template('login.html')
 	# GET
 	if request.method == 'GET':
-		return render_template('login.html', menu=nav.default_menu)
+		return render_template('login.html')
+
+@main.route("/register", methods=['GET','POST'])
+def register():
+	if g.user is not None:
+		return redirect(url_for('pages.dashboard'))
+	# POST
+	if request.method == 'POST':
+		if request.form['type'] == "register": # ------ REGISTER
+			fname = request.form['fname'] # First Name
+			lname = request.form['lname'] # Last Name
+			uname = request.form['uname'] # Screenname
+			email = request.form['email'] # Email Address
+			pword = request.form['pword'] # Password
+			rpass = request.form['rpass'] # Repeated Password
+			result = register_user(fname, lname, uname, email, pword, rpass)
+			if (result == RegisterStatus.success):
+				return redirect(url_for('pages.dashboard'))
+			else:
+				return render_template('login.html')
+
+		return render_template('register.html')
+	# GET
+	if request.method == 'GET':
+		return render_template('register.html')
 
 @main.route("/logout")
 def logout():
@@ -144,9 +161,9 @@ def login_user(username, password):
 		flash("su: Authentication failure")
 		return LoginStatus.bad_password
 
-def register_user(username, email, password):
+def register_user(firstName, lastName, username, email, password, rpass):
 	'''
-	Register a new user with username, email, and password.
+	Register a new user with first name, last name, username, email, and password.
 	Return False if failure.
 	'''
 	# Validation #TODO Improve validation, move to separate function.
@@ -163,6 +180,11 @@ def register_user(username, email, password):
 		flash("Username must be shorter than " + str(max_usr_length) + " characters.")
 		return RegisterStatus.bad_validation
 
+	# Password and Repeat Password Identical
+	if (password != rpass):
+		flash("Passwords are not the same.")
+		return RegisterStatus.bad_validation
+
 	# Password length
 	if (len(password) < min_pwd_length):
 		flash("Password must be longer than " + str(min_pwd_length) + " characters.")
@@ -175,8 +197,10 @@ def register_user(username, email, password):
 	pword_hash = pbkdf2_sha256.hash(password)
 	# Create New User.
 	new_user = models.User()
-	new_user.email = email
+	new_user.firstName = firstName
+	new_user.lastName = lastName
 	new_user.username = username
+	new_user.email = email
 	new_user.password = pword_hash
 	try:
 		new_user.save()

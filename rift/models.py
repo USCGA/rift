@@ -11,6 +11,8 @@ class Motd(Document):
 	date_created = DateTimeField(default=datetime.datetime.utcnow)
 
 class User(Document):
+	firstName = StringField(required=True)
+	lastName = StringField(required=True)
 	username = StringField(required=True, unique=True)
 	email = EmailField(unique=True)
 	password = StringField(required=True)
