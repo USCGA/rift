@@ -1,6 +1,8 @@
 # Navigation Menus
 # menu > category > section > subsection > item
+# (Menus have categories have sections have subsections have items.)
 
+# ----- MENU CLASSES -----
 
 class MenuItem:
 	def __init__(self, name, url):
@@ -34,38 +36,37 @@ class Menu:
 		self.categories = categories
 
 
-# Default Menu
-Home = MenuItem("Home", "/dashboard")
-Learn = MenuItem("Learn", "/dashboard")
-Play = MenuItem("Play", "/dashboard") # Unimplemented
-Team = MenuItem("Team", "/dashboard") # Unimplemented
-Contact = MenuItem("Contact", "/dashboard") # Unimplemented
+# ----- MENU ITEMS -----
 
-# Admin
-Admin = MenuItem("Admin", "#") # Unimplemented
+# Guest Menu
+item_home = MenuItem("Home", "/dashboard")
+item_learn = MenuItem("Learn", "/dashboard") # Unimplemented
+item_play = MenuItem("Play", "/dashboard") # Unimplemented
+item_team = MenuItem("Team", "/dashboard") # Unimplemented
+item_contact = MenuItem("Contact", "/dashboard") # Unimplemented
 
 # Session Management
-Login = MenuItem("Login", "/login")
-Logout = MenuItem("Logout", "/logout")
+item_login = MenuItem("Login", "/login")
+item_logout = MenuItem("Logout", "/logout")
 
-# Dummy
-Dummy = MenuItem("MenuItem", "#")
+# Play
+item_scoreboard = MenuItem("Scoreboard", "/scoreboard")
+
+# Dummy (Subsections can't be empty, so this is necessary during development)
+item_dummy = MenuItem("item_dummy", "#")
 
 # ----- MENU ITEM Collections ------
-default_menu = [Home, Learn, Play, Team, Contact]
-admin_menu = default_menu + [Admin]
-
-
-## NEW TEMPLATE STUFF
+# (This is necessary for the landing pages at "/")
+guest_menu = [item_home, item_learn, item_play, item_team, item_contact]
 
 # ----- MENU SUBSECTIONS -----
-subsection_login = MenuSubSection("Login / Logout", [Login, Logout])
-subsection_latest = MenuSubSection("Latest",[Dummy])
-subsection_inhouse = MenuSubSection("In House", [Dummy])
-subsection_curated = MenuSubSection("Curated", [Dummy])
-subsection_skilltree = MenuSubSection("Skill Tree", [Dummy])
-subsection_announcements = MenuSubSection("Announcements", [Dummy])
-subsection_accountsettings = MenuSubSection("Account Settings", [Dummy])
+subsection_login = MenuSubSection("Login / Logout", [item_login, item_logout])
+subsection_latest = MenuSubSection("Latest",[item_dummy])
+subsection_inhouse = MenuSubSection("In House", [item_scoreboard])
+subsection_curated = MenuSubSection("Curated", [item_dummy])
+subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
+subsection_announcements = MenuSubSection("Announcements", [item_dummy])
+subsection_accountsettings = MenuSubSection("Account Settings", [item_dummy])
 
 # ----- MENU SECTIONS -----
 section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_announcements])

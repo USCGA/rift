@@ -65,13 +65,13 @@ def home():
 	screenname = g.user.username.lower() if g.user is not None else default_screenname
 	return render_template(
 		'home_v2.html', 
-		menu=nav.default_menu, 
+		menu=nav.guest_menu, 
 		screenname=screenname)
 
 @main.route("/dashboard")
 @login_required
 def dashboard():
-	return render_template('blank.html', menu=nav.menu_main, user=g.user)
+	return render_template('dashboard.html', menu=nav.menu_main, user=g.user)
 
 @main.route("/login", methods=['GET','POST'])
 def login():
@@ -108,7 +108,7 @@ def register():
 			if (result == RegisterStatus.success):
 				return redirect(url_for('pages.dashboard'))
 			else:
-				return render_template('login.html')
+				return render_template('register.html')
 
 		return render_template('register.html')
 	# GET
