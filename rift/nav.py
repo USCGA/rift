@@ -39,11 +39,11 @@ class Menu:
 # ----- MENU ITEMS -----
 
 # Guest Menu
-item_home = MenuItem("Home", "/dashboard")
-item_learn = MenuItem("Learn", "/dashboard") # Unimplemented
-item_play = MenuItem("Play", "/dashboard") # Unimplemented
-item_team = MenuItem("Team", "/dashboard") # Unimplemented
-item_contact = MenuItem("Contact", "/dashboard") # Unimplemented
+item_home = MenuItem("Rift", "/dashboard")
+item_github = MenuItem("GitHub", "http://www.github.com/USCGA")
+item_public_bulletin = MenuItem("Bulletin", "#") # TODO: Implement public bulletin
+item_team = MenuItem("Team", "#") # TODO: Implement public team page
+item_contact = MenuItem("Contact", "#") # TODO: Implement public contact page
 
 # Session Management
 item_login = MenuItem("Login", "/login")
@@ -57,7 +57,7 @@ item_dummy = MenuItem("item_dummy", "#")
 
 # ----- MENU ITEM Collections ------
 # (This is necessary for the landing pages at "/")
-guest_menu = [item_home, item_learn, item_play, item_team, item_contact]
+guest_menu = [item_home, item_github, item_public_bulletin, item_team, item_contact]
 
 # ----- MENU SUBSECTIONS -----
 subsection_login = MenuSubSection("Login / Logout", [item_login, item_logout])
