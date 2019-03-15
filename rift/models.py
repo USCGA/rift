@@ -5,14 +5,15 @@ from mongoengine.fields import \
 	(DateTimeField, EmbeddedDocumentField, ListField, ReferenceField, StringField, EmailField)
 
 # Models
-class Motd(Document):
-	title = StringField(max_length=200, required=True)
-	message = StringField(max_length=500, required=True)
-	date_created = DateTimeField(default=datetime.datetime.utcnow)
-
 class User(Document):
 	firstName = StringField(required=True)
 	lastName = StringField(required=True)
 	username = StringField(required=True, unique=True)
 	email = EmailField(unique=True)
 	password = StringField(required=True)
+
+class Post(Document):
+	title = StringField(max_length=50, required=True)
+	content = StringField(max_length=2000, required=True)
+	author = ReferenceField(User)
+	date = DateTimeField(default=datetime.datetime.utcnow)

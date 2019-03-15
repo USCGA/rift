@@ -1,0 +1,55 @@
+{% extends "rift_base.html" %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+	<h1 class="h3 mb-0 text-gray-800">Announcements</h1>
+	<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>
+</div>
+
+% for post in posts
+<div class="row">
+    <!-- Post -->
+    <div class="col-lg">
+        <div class="card shadow mb-4">
+                <div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold text-primary"><a href="/posts/{{ post.id }}">{{ post.title }}</a></h6>
+					<div class="mb-0">
+						<span class="font-weight-lighter">{{ post.date.date() }}</span> {{ post.author.firstName }} {{ post.author.lastName }} <span class="text-xs" style="font-family:'Courier New', Courier, monospace">&lt;{{ post.author.username }}&gt;</span>
+					</div>
+				</div>
+                <div class="card-body">
+                    {{ post.content }}
+                </div>
+        </div>
+    </div>
+</div>
+% endfor
+{% endblock %}
+
+{% block modals %}
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="CreateModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="CreateModalLabel">New Announcement</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="newPost" action="" method='post'>
+						<p>Title</p>
+						<input class="mb-3" name="postTitle">
+						<p>Content</p>
+						<textarea name="postContent" form="newPost" style="min-width: 100%; min-height: 200px"></textarea>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<input type="submit" class="btn btn-primary" form="newPost" href="#" value="Create">
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

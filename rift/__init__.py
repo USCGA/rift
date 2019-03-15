@@ -1,6 +1,5 @@
 ﻿from flask import Flask, render_template, Markup, session
 from rift.routes import main
-from rift.models import Motd
 import rift.db
 import secrets
 

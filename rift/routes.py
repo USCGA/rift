@@ -55,6 +55,38 @@ def home():
 def dashboard():
 	return render_template('rift_dashboard.html', menu=nav.menu_main, user=g.user)
 
+# Rift Announcements Page
+@main.route("/posts", methods=['GET','POST'])
+@login_required
+def posts():
+	postsQuerySet = models.Post.objects.order_by('-date')
+	# POST
+	if request.method == 'POST':
+		newPost = models.Post()
+		newPost.author = g.user
+		newPost.title = request.form['postTitle']
+		newPost.content = request.form['postContent']
+		newPost.save()
+	return render_template('rift_announcements.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
+
+# Rift Post View Page
+@main.route("/posts/<id>", methods=['GET','POST'])
+@login_required
+def post(id):
+	postDocument = models.Post.objects.get(id=id)
+	# GET
+	if request.method == 'GET':
+		deleteArg = request.args.get('delete', default = False, type = bool)
+		if deleteArg == True: 
+			postDocument.delete()
+			return redirect(url_for('pages.posts'))
+	# POST
+	if request.method == 'POST':
+		postDocument.title = request.form['postTitle']
+		postDocument.content = request.form['postContent']
+		postDocument.save()
+	return render_template('rift_post.html', menu=nav.menu_main, user=g.user, post=postDocument)
+
 # Login Page
 @main.route("/login", methods=['GET','POST'])
 def login():

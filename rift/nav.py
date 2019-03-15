@@ -37,17 +37,23 @@ class Menu:
 
 
 # ----- MENU ITEMS -----
+# TODO Convert static url references to dynamic "url_for" references.
 
 # Guest Menu
 item_home = MenuItem("Rift", "/dashboard")
 item_github = MenuItem("GitHub", "http://www.github.com/USCGA")
-item_public_bulletin = MenuItem("Bulletin", "#") # TODO: Implement public bulletin
-item_team = MenuItem("Team", "#") # TODO: Implement public team page
-item_contact = MenuItem("Contact", "#") # TODO: Implement public contact page
+item_public_bulletin = MenuItem("Bulletin", "#") # TODO Implement public bulletin
+item_team = MenuItem("Team", "#") # TODO Implement public team page
+item_contact = MenuItem("Contact", "#") # TODO Implement public contact page
 
 # Session Management
 item_login = MenuItem("Login", "/login")
 item_logout = MenuItem("Logout", "/logout")
+
+# Posts
+item_announcements = MenuItem("Announcements", "/posts")
+#item_new_post = MenuItem("New Post", "#")
+#item_new_writeup = MenuItem("New Writeup", "#")
 
 # Play
 item_scoreboard = MenuItem("Scoreboard", "/scoreboard")
@@ -65,11 +71,11 @@ subsection_latest = MenuSubSection("Latest",[item_dummy])
 subsection_inhouse = MenuSubSection("In House", [item_scoreboard])
 subsection_curated = MenuSubSection("Curated", [item_dummy])
 subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
-subsection_announcements = MenuSubSection("Announcements", [item_dummy])
+subsection_read = MenuSubSection("Read", [item_announcements])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_dummy])
 
 # ----- MENU SECTIONS -----
-section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_announcements])
+section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_read])
 section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection_latest, subsection_inhouse, subsection_curated])
 section_skills = MenuSection("Skills", "section_skills", "fa-flask", [subsection_skilltree])
 section_account = MenuSection("Account", "section_account", "fa-address-card", [subsection_accountsettings, subsection_login])

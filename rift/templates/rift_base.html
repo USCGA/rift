@@ -305,6 +305,8 @@
 		<i class="fas fa-angle-up"></i>
 	</a>
 
+	<!-- Modals -->
+
 	<!-- Logout Modal-->
 	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
@@ -324,6 +326,10 @@
 		</div>
 	</div>
 
+	{% block modals %}{% endblock %}
+
+	<!-- End of Modals -->
+
 	<!-- Bootstrap core JavaScript-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
@@ -335,7 +341,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
 	<!-- Page level custom scripts -->
- {% block scripts %}{% endblock %}
+ 	{% block scripts %}{% endblock %}
 
 	<!-- Custom scripts for all pages-->
 	<script src="{{ url_for('static', filename='js/sb-admin-2.min.js') }}"></script>
