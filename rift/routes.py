@@ -80,6 +80,30 @@ def posts():
 		newPost.save()
 	return render_template('rift_posts.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
 
+# Rift Writeups Page
+# TODO this is currently duplicate of "posts" page
+@main.route("/writeups", methods=['GET','POST'])
+@login_required
+def writeups():
+	postsQuerySet = models.Post.objects.order_by('-date')
+	authorArg = request.args.get('author', type = str)
+	if authorArg is not None:
+		try:
+			# We have to try here, because specified user might not exist.
+			selAuthor = models.User.objects.get(username=authorArg)
+			postsQuerySet = postsQuerySet(author=selAuthor)
+		except:
+			postsQuerySet = []
+
+	# POST
+	if request.method == 'POST':
+		newPost = models.Post()
+		newPost.author = g.user
+		newPost.title = request.form['postTitle']
+		newPost.content = request.form['postContent']
+		newPost.save()
+	return render_template('rift_writeups.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
+
 # Rift Single Post Page
 @main.route("/posts/<id>", methods=['GET','POST'])
 @login_required

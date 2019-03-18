@@ -65,9 +65,13 @@ item_public_bulletin = MenuItem("Bulletin", "#", is_url=True) # TODO Implement p
 item_team = MenuItem("Team", "#", is_url=True) # TODO Implement public team page
 item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public contact page
 
-# Session Management
+# Learn
+item_writeups = MenuItem("Writeups", 'page.writeups')
+
+# Options
 item_login = MenuItem("Login", "page.login")
 item_logout = MenuItem("Logout", "page.logout")
+item_profile = MenuItem("Profile", "page.profile")
 
 # Posts
 item_announcements = MenuItem("Announcements", "page.posts")
@@ -91,18 +95,20 @@ subsection_inhouse = MenuSubSection("In House", [item_scoreboard])
 subsection_curated = MenuSubSection("Curated", [item_dummy])
 subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
 subsection_read = MenuSubSection("Read", [item_announcements])
-subsection_accountsettings = MenuSubSection("Account Settings", [item_dummy])
+subsection_writups = MenuSubSection("Read", [item_writeups])
+subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
 
 # ----- MENU SECTIONS -----
 section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_read])
 section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection_latest, subsection_inhouse, subsection_curated])
 section_skills = MenuSection("Skills", "section_skills", "fa-flask", [subsection_skilltree])
+section_writeups = MenuSection("Writeups", "section_writeups", "fa-book", [subsection_writups])
 section_account = MenuSection("Account", "section_account", "fa-address-card", [subsection_accountsettings, subsection_login])
 
 # ----- MENU CATEGORY -----
 category_bulletin = MenuCategory("Bulletin", [section_posts])
 category_play = MenuCategory("Play", [section_ctf])
-category_learn = MenuCategory("Learn", [section_skills])
+category_learn = MenuCategory("Learn", [section_skills, section_writeups])
 category_options = MenuCategory("Options", [section_account])
 
 # ----- MENUS -----
