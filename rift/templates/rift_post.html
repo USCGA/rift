@@ -3,18 +3,19 @@
 {% block content %}
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-0">
-	<h1 class="h3 mb-0 text-gray-800">{{ post.title }}</h1>
+	<h1 class="h5 mb-0 text-gray-800 font-weight-lighter">{{ post.title }}</h1>
+	% if user == post.author
 	<div>
 		<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editModal"><i class="fas fa-align-left fa-sm text-white-50"></i> Edit</a>
 		<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
 	</div>
+	% endif
 </div>
-<div class="mb-2">
+<div>
 	<span class="font-weight-lighter">{{ post.date.date() }}</span> {{ post.author.firstName }} {{ post.author.lastName }} <span class="text-xs" style="font-family:'Courier New', Courier, monospace">&lt;{{ post.author.username }}&gt;</span>
 </div>
-
-<div class="text-gray-800">
-	{{post.content}}
+<div class="page-body">
+		{{ post.content|markdown(fenced_code=true, underline=true, tables=true) }}
 </div>
 {% endblock %}
 
@@ -34,7 +35,7 @@
 						<p>Title</p>
 						<input class="mb-3" name="postTitle" value="{{ post.title }}">
 						<p>Content</p>
-						<textarea name="postContent" form="editPost" style="min-width: 100%; min-height: 200px">{{ post.content }}</textarea>
+						<textarea class="text-monospace" name="postContent" form="editPost" style="min-width: 100%; min-height: 300px">{{ post.content }}</textarea>
 					</form>
 				</div>
 				<div class="modal-footer">

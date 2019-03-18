@@ -1,4 +1,5 @@
 ﻿from flask import Flask, render_template, Markup, session
+from flask_misaka import Misaka
 from rift.routes import main
 import rift.db
 import secrets
@@ -6,6 +7,9 @@ import secrets
 
 app = Flask(__name__)
 db = rift.db.connection
+
+# Enable the Misaka extension. (Markdown Parser)
+Misaka(app)
 
 # Read/Generate secret key.
 try:

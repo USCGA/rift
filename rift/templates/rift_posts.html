@@ -11,16 +11,14 @@
 <div class="row">
     <!-- Post -->
     <div class="col-lg">
-        <div class="card shadow mb-4">
+        <div class="card border-left-info shadow mb-4">
                 <div class="card-header py-3">
-					<h6 class="m-0 font-weight-bold text-primary"><a href="/posts/{{ post.id }}">{{ post.title }}</a></h6>
+					<a href="{{ url_for('pages.post',id=post.id) }}"><h6 class="m-0 font-weight-bold text-primary">{{ post.title }}</h6></a>
 					<div class="mb-0">
 						<span class="font-weight-lighter">{{ post.date.date() }}</span> {{ post.author.firstName }} {{ post.author.lastName }} <span class="text-xs" style="font-family:'Courier New', Courier, monospace">&lt;{{ post.author.username }}&gt;</span>
 					</div>
 				</div>
-                <div class="card-body">
-                    {{ post.content }}
-                </div>
+                
         </div>
     </div>
 </div>
@@ -42,7 +40,7 @@
 						<p>Title</p>
 						<input class="mb-3" name="postTitle">
 						<p>Content</p>
-						<textarea name="postContent" form="newPost" style="min-width: 100%; min-height: 200px"></textarea>
+						<textarea class="text-monospace" name="postContent" form="newPost" style="min-width: 100%; min-height: 300px"></textarea>
 					</form>
 				</div>
 				<div class="modal-footer">

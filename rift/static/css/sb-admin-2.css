@@ -77,7 +77,7 @@ body {
 hr {
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
-  height: 0;
+  height: 1;
   overflow: visible;
 }
 
@@ -4857,6 +4857,23 @@ input[type="button"].btn-block {
   color: #fff;
 }
 
+/* CHANGE ADD page-body */
+.page-body {
+  padding: 1.25rem;
+  color: var(--white)
+}
+
+.page-body > hr {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--white)
+}
+
+.page-body > pre {
+  color:var(--white);
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.3)
+}
+
 .card {
   position: relative;
   display: -webkit-box;
@@ -6991,7 +7008,7 @@ button.bg-dark:focus {
   background-color: #fff !important;
 }
 
-/* CHANGE */
+/* CHANGE ADDITION miamis */
 .bg-miami-1 {
   background-color: #191d32 !important;
 }

@@ -53,13 +53,24 @@ def home():
 @main.route("/dashboard")
 @login_required
 def dashboard():
-	return render_template('rift_dashboard.html', menu=nav.menu_main, user=g.user)
+	# Retrieve latest announcements
+	postsQuerySet = models.Post.objects.order_by('-date').limit(3)
+	return render_template('rift_dashboard.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
 
-# Rift Announcements Page
+# Rift Posts Page
 @main.route("/posts", methods=['GET','POST'])
 @login_required
 def posts():
 	postsQuerySet = models.Post.objects.order_by('-date')
+	authorArg = request.args.get('author', type = str)
+	if authorArg is not None:
+		try:
+			# We have to try here, because specified user might not exist.
+			selAuthor = models.User.objects.get(username=authorArg)
+			postsQuerySet = postsQuerySet(author=selAuthor)
+		except:
+			postsQuerySet = []
+
 	# POST
 	if request.method == 'POST':
 		newPost = models.Post()
@@ -67,9 +78,9 @@ def posts():
 		newPost.title = request.form['postTitle']
 		newPost.content = request.form['postContent']
 		newPost.save()
-	return render_template('rift_announcements.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
+	return render_template('rift_posts.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
 
-# Rift Post View Page
+# Rift Single Post Page
 @main.route("/posts/<id>", methods=['GET','POST'])
 @login_required
 def post(id):
@@ -77,14 +88,17 @@ def post(id):
 	# GET
 	if request.method == 'GET':
 		deleteArg = request.args.get('delete', default = False, type = bool)
-		if deleteArg == True: 
+		# User must be the document's author to delete. #TODO Add admin perms
+		if (deleteArg == True and g.user == postDocument.author):
 			postDocument.delete()
 			return redirect(url_for('pages.posts'))
 	# POST
 	if request.method == 'POST':
-		postDocument.title = request.form['postTitle']
-		postDocument.content = request.form['postContent']
-		postDocument.save()
+		# User must be the document's author to edit. #TODO Add admin perms
+		if (g.user == postDocument.author):
+			postDocument.title = request.form['postTitle']
+			postDocument.content = request.form['postContent'] #TODO Display formatted markdown
+			postDocument.save()
 	return render_template('rift_post.html', menu=nav.menu_main, user=g.user, post=postDocument)
 
 # Login Page

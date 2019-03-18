@@ -14,6 +14,6 @@ class User(Document):
 
 class Post(Document):
 	title = StringField(max_length=50, required=True)
-	content = StringField(max_length=2000, required=True)
+	content = StringField(max_length=20000, required=True)
 	author = ReferenceField(User)
 	date = DateTimeField(default=datetime.datetime.utcnow)
