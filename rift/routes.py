@@ -7,7 +7,7 @@ import rift.user as user
 
 # All routes defined below belong to the "main" blueprint 
 # which is applied to flask.app in __init__.py.
-main = Blueprint("pages", __name__)
+main = Blueprint("page", __name__)
 
 
 # --- Configuration ---
@@ -20,7 +20,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if g.user is None:
-            return redirect(url_for('pages.login', next=request.url))
+            return redirect(url_for('page.login', next=request.url))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -91,7 +91,7 @@ def post(id):
 		# User must be the document's author to delete. #TODO Add admin perms
 		if (deleteArg == True and g.user == postDocument.author):
 			postDocument.delete()
-			return redirect(url_for('pages.posts'))
+			return redirect(url_for('page.posts'))
 	# POST
 	if request.method == 'POST':
 		# User must be the document's author to edit. #TODO Add admin perms
@@ -101,11 +101,17 @@ def post(id):
 			postDocument.save()
 	return render_template('rift_post.html', menu=nav.menu_main, user=g.user, post=postDocument)
 
+# Rift Profile Page
+@main.route("/profile")
+@login_required
+def profile():
+	return render_template('rift_profile.html', menu=nav.menu_main, user=g.user)
+
 # Login Page
 @main.route("/login", methods=['GET','POST'])
 def login():
 	if g.user is not None:
-		return redirect(url_for('pages.dashboard'))
+		return redirect(url_for('page.dashboard'))
 	# POST
 	if request.method == 'POST':
 		if request.form['type'] == "login": # ----------- LOGIN
@@ -113,7 +119,7 @@ def login():
 			pword = request.form['pword']
 			result = user.Login(uname, pword)
 			if (result == user.LoginStatus.success):
-				return redirect(url_for('pages.dashboard'))
+				return redirect(url_for('page.dashboard'))
 			else:
 				return render_template('login.html')
 	# GET
@@ -124,7 +130,7 @@ def login():
 @main.route("/register", methods=['GET','POST'])
 def register():
 	if g.user is not None:
-		return redirect(url_for('pages.dashboard'))
+		return redirect(url_for('page.dashboard'))
 	# POST
 	if request.method == 'POST':
 		if request.form['type'] == "register": # ------ REGISTER
@@ -136,7 +142,7 @@ def register():
 			rpass = request.form['rpass'] # Repeated Password
 			result = user.Register(fname, lname, uname, email, pword, rpass)
 			if (result == user.RegisterStatus.success):
-				return redirect(url_for('pages.dashboard'))
+				return redirect(url_for('page.dashboard'))
 			else:
 				return render_template('register.html')
 
@@ -151,4 +157,4 @@ def register():
 @main.route("/logout")
 def logout():
 	session.clear()
-	return redirect(url_for('pages.home'))
+	return redirect(url_for('page.home'))

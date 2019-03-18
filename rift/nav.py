@@ -1,3 +1,4 @@
+from flask import current_app, url_for
 # Navigation Menus
 # menu > category > section > subsection > item
 # (Menus have categories have sections have subsections have items.)
@@ -5,10 +6,30 @@
 # ----- MENU CLASSES -----
 
 class MenuItem:
-	def __init__(self, name, url):
-		"""Defines name and url for each menu item."""
+	def __init__(self, name, target, *, is_url=False):
+		"""Defines name and page for each menu item."""
 		self.name = name
-		self.url = url
+		self.__target = target
+		self.is_url = is_url
+
+	# This function is kind of a hack. It allows url_for to be computed during a request.
+	# Without doing that, url_for would fail in predefined MenuItem instances because this 
+	# file is imported before the Flask app initializes and creates the application context.
+	#
+	# This is nice though because both external urls (eg. item_github) and dynamically referenced
+	# internal pages (eg. item_dashboard) can use this single class.
+	#
+	# However, I imagine doing this operation for every menu_item on every request is
+	# a waste of computation. I'll find a better way to do this later. TODO Optimize rift.nav
+	@property
+	def url(self):
+		if (self.is_url == True):
+			# If the target is already a url, return it.
+			return self.__target
+		else:
+			# If the target is a page reference (eg. 'page.home'),
+			# resolve the url and return that instead.
+			return url_for(self.__target)
 
 class MenuSubSection:
 	def __init__(self, name, items):
@@ -37,29 +58,27 @@ class Menu:
 
 
 # ----- MENU ITEMS -----
-# TODO Convert static url references to dynamic "url_for" references.
-
 # Guest Menu
-item_home = MenuItem("Rift", "/dashboard")
-item_github = MenuItem("GitHub", "http://www.github.com/USCGA")
-item_public_bulletin = MenuItem("Bulletin", "#") # TODO Implement public bulletin
-item_team = MenuItem("Team", "#") # TODO Implement public team page
-item_contact = MenuItem("Contact", "#") # TODO Implement public contact page
+item_home = MenuItem("Rift", "page.dashboard")
+item_github = MenuItem("GitHub", "http://www.github.com/USCGA", is_url=True)
+item_public_bulletin = MenuItem("Bulletin", "#", is_url=True) # TODO Implement public bulletin
+item_team = MenuItem("Team", "#", is_url=True) # TODO Implement public team page
+item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public contact page
 
 # Session Management
-item_login = MenuItem("Login", "/login")
-item_logout = MenuItem("Logout", "/logout")
+item_login = MenuItem("Login", "page.login")
+item_logout = MenuItem("Logout", "page.logout")
 
 # Posts
-item_announcements = MenuItem("Announcements", "/posts")
+item_announcements = MenuItem("Announcements", "page.posts")
 #item_new_post = MenuItem("New Post", "#")
 #item_new_writeup = MenuItem("New Writeup", "#")
 
 # Play
-item_scoreboard = MenuItem("Scoreboard", "/scoreboard")
+item_scoreboard = MenuItem("Scoreboard", "#", is_url=True)
 
 # Dummy (Subsections can't be empty, so this is necessary during development)
-item_dummy = MenuItem("item_dummy", "#")
+item_dummy = MenuItem("item_dummy", "#", is_url=True)
 
 # ----- MENU ITEM Collections ------
 # (This is necessary for the landing pages at "/")
