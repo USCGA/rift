@@ -13,7 +13,15 @@ class User(Document):
 	password = StringField(required=True)
 
 class Post(Document):
-	title = StringField(max_length=50, required=True)
+	title = StringField(max_length=64, required=True)
 	content = StringField(max_length=20000, required=True)
 	author = ReferenceField(User)
 	date = DateTimeField(default=datetime.datetime.utcnow)
+	
+	meta = {'allow_inheritance': True}
+
+class WriteupCollection(Document):
+	name = StringField(max_length=64, required=True)
+
+class Writeup(Post):
+	collection = ReferenceField(WriteupCollection)
