@@ -2,7 +2,7 @@
 import datetime
 from mongoengine import Document
 from mongoengine.fields import \
-	(DateTimeField, EmbeddedDocumentField, ListField, ReferenceField, StringField, EmailField)
+	(DateTimeField, EmbeddedDocumentField, ListField, ReferenceField, StringField, EmailField, URLField)
 
 # Models
 class User(Document):
@@ -21,7 +21,8 @@ class Post(Document):
 	meta = {'allow_inheritance': True}
 
 class WriteupCollection(Document):
-	name = StringField(max_length=64, required=True)
+	name = StringField(max_length=64, unique=True, required=True)
+	link = URLField()
 
 class Writeup(Post):
 	collection = ReferenceField(WriteupCollection)
