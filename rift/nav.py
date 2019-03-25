@@ -61,12 +61,13 @@ class Menu:
 # Guest Menu
 item_home = MenuItem("Rift", "page.dashboard")
 item_github = MenuItem("GitHub", "http://www.github.com/USCGA", is_url=True)
-item_public_bulletin = MenuItem("Bulletin", "#", is_url=True) # TODO Implement public bulletin
+item_publicbulletin = MenuItem("Bulletin", "#", is_url=True) # TODO Implement public bulletin
 item_team = MenuItem("Team", "#", is_url=True) # TODO Implement public team page
 item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public contact page
 
 # Learn
 item_writeups = MenuItem("Writeups", 'page.writeups')
+item_writeupcollections = MenuItem("Collections", 'page.writeup_collections')
 
 # Options
 item_login = MenuItem("Login", "page.login")
@@ -75,8 +76,6 @@ item_profile = MenuItem("Profile", "page.profile")
 
 # Posts
 item_announcements = MenuItem("Announcements", "page.posts")
-#item_new_post = MenuItem("New Post", "#")
-#item_new_writeup = MenuItem("New Writeup", "#")
 
 # Play
 item_scoreboard = MenuItem("Scoreboard", "#", is_url=True)
@@ -86,7 +85,7 @@ item_dummy = MenuItem("item_dummy", "#", is_url=True)
 
 # ----- MENU ITEM Collections ------
 # (This is necessary for the landing pages at "/")
-guest_menu = [item_home, item_github, item_public_bulletin, item_team, item_contact]
+guest_menu = [item_home, item_github, item_publicbulletin, item_team, item_contact]
 
 # ----- MENU SUBSECTIONS -----
 subsection_login = MenuSubSection("Login / Logout", [item_login, item_logout])
@@ -95,7 +94,7 @@ subsection_inhouse = MenuSubSection("In House", [item_scoreboard])
 subsection_curated = MenuSubSection("Curated", [item_dummy])
 subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
 subsection_read = MenuSubSection("Read", [item_announcements])
-subsection_writups = MenuSubSection("Read", [item_writeups])
+subsection_writups = MenuSubSection("Read", [item_writeups, item_writeupcollections])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
 
 # ----- MENU SECTIONS -----

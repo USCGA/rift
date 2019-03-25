@@ -81,28 +81,44 @@ def posts():
 	return render_template('rift_posts.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
 
 # Rift Writeups Page
-# TODO this is currently duplicate of "posts" page
 @main.route("/writeups", methods=['GET','POST'])
 @login_required
 def writeups():
-	postsQuerySet = models.Post.objects.order_by('-date')
+	collections = models.WriteupCollection.objects
+	writeupQuerySet = models.Writeup.objects.order_by('-date')
 	authorArg = request.args.get('author', type = str)
 	if authorArg is not None:
 		try:
 			# We have to try here, because specified user might not exist.
 			selAuthor = models.User.objects.get(username=authorArg)
-			postsQuerySet = postsQuerySet(author=selAuthor)
+			writeupQuerySet = writeupQuerySet(author=selAuthor)
 		except:
-			postsQuerySet = []
+			writeupQuerySet = []
 
 	# POST
 	if request.method == 'POST':
-		newPost = models.Post()
-		newPost.author = g.user
-		newPost.title = request.form['postTitle']
-		newPost.content = request.form['postContent']
-		newPost.save()
-	return render_template('rift_writeups.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
+		newWriteup = models.Writeup()
+		newWriteup.author = g.user
+		newWriteup.title = request.form['writeupTitle']
+		newWriteup.content = request.form['writeupContent']
+		newWriteup.collection = models.WriteupCollection.objects.get(id=request.form['writeupCollection'])
+		newWriteup.save()
+	return render_template('rift_writeups.html', menu=nav.menu_main, user=g.user, posts=writeupQuerySet, collections=collections)
+
+# Rift Writeup Collections
+# TODO this is currently unimplemented
+@main.route("/writeups/collections", methods=['GET','POST'])
+@login_required
+def writeup_collections():
+	collectionQuerySet = models.WriteupCollection.objects
+
+	# POST
+	if request.method == 'POST':
+		newCollection = models.WriteupCollection()
+		newCollection.name = request.form['collectionTitle']
+		newCollection.link = request.form['collectionLink']
+		newCollection.save()
+	return render_template('rift_writeupcollections.html', menu=nav.menu_main, user=g.user, collections=collectionQuerySet)
 
 # Rift Single Post Page
 @main.route("/posts/<id>", methods=['GET','POST'])
