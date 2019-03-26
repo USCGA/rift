@@ -11,6 +11,9 @@
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-0">
 	<h1 class="h5 mb-0 text-gray-800 font-weight-lighter">{{ post.title }}</h1>
+	% if post._cls == "Post.Writeup"
+	<h1>Writeup</h1>
+	% endif
 	% if user == post.author
 	<div>
 		<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editModal"><i class="fas fa-align-left fa-sm text-white-50"></i> Edit</a>

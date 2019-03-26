@@ -2,7 +2,7 @@
 import datetime
 from mongoengine import Document
 from mongoengine.fields import \
-	(DateTimeField, EmbeddedDocumentField, ListField, ReferenceField, StringField, EmailField, URLField)
+	(DateTimeField, EmbeddedDocumentField, ListField, ReferenceField, StringField, EmailField, URLField, ListField)
 
 # Models
 class User(Document):
@@ -26,3 +26,6 @@ class WriteupCollection(Document):
 
 class Writeup(Post):
 	collection = ReferenceField(WriteupCollection)
+
+class Announcement(Post):
+	pass
