@@ -55,14 +55,20 @@ def home():
 def dashboard():
 	# Retrieve latest announcements
 	postsQuerySet = models.Post.objects.order_by('-date').limit(3)
+	postsQuerySet = postsQuerySet(_cls='Post.Announcement')
 	return render_template('rift_dashboard.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
 
 # Rift Posts Page
-@main.route("/posts", methods=['GET','POST'])
+@main.route("/posts")
 @login_required
 def posts():
 	postsQuerySet = models.Post.objects.order_by('-date')
+
+	# GET arguments
+	typeArg = request.args.get('type', type = str)
 	authorArg = request.args.get('author', type = str)
+	if typeArg is not None:
+		postsQuerySet = postsQuerySet(_cls=typeArg)
 	if authorArg is not None:
 		try:
 			# We have to try here, because specified user might not exist.
@@ -71,14 +77,27 @@ def posts():
 		except:
 			postsQuerySet = []
 
+	return render_template('rift_posts.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
+
+# Rift New Announcement Page
+@main.route("/new-announcement", methods=['GET','POST'])
+@login_required
+def new_announcement():
 	# POST
 	if request.method == 'POST':
-		newPost = models.Post()
-		newPost.author = g.user
-		newPost.title = request.form['postTitle']
-		newPost.content = request.form['postContent']
-		newPost.save()
-	return render_template('rift_posts.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
+		newAnnouncement = models.Announcement()
+		newAnnouncement.author = g.user
+		newAnnouncement.title = request.form['announcementTitle']
+		newAnnouncement.content = request.form['announcementContent']
+		newAnnouncement.save()
+		return redirect(url_for('page.posts',type="Post.Announcement"))
+	return render_template('rift_new_announcement.html', menu=nav.menu_main, user=g.user)
+
+# Rift New Writeup Page #TODO Make html for this page.
+@main.route("/new-writeup")
+@login_required
+def new_writeup():
+	return render_template('rift_new_announcement.html', menu=nav.menu_main, user=g.user)
 
 # Rift Writeups Page
 @main.route("/writeups", methods=['GET','POST'])
@@ -118,7 +137,7 @@ def writeup_collections():
 		newCollection.name = request.form['collectionTitle']
 		newCollection.link = request.form['collectionLink']
 		newCollection.save()
-	return render_template('rift_writeupcollections.html', menu=nav.menu_main, user=g.user, collections=collectionQuerySet)
+	return render_template('rift_writeup_collections.html', menu=nav.menu_main, user=g.user, collections=collectionQuerySet)
 
 # Rift Single Post Page
 @main.route("/posts/<id>", methods=['GET','POST'])

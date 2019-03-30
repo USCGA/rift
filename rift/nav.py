@@ -6,11 +6,12 @@ from flask import current_app, url_for
 # ----- MENU CLASSES -----
 
 class MenuItem:
-	def __init__(self, name, target, *, is_url=False):
+	def __init__(self, name, target, *, is_url=False, **kwargs):
 		"""Defines name and page for each menu item."""
 		self.name = name
 		self.__target = target
 		self.is_url = is_url
+		self.__kwargs = kwargs
 
 	# This function is kind of a hack. It allows url_for to be computed during a request.
 	# Without doing that, url_for would fail in predefined MenuItem instances because this 
@@ -29,7 +30,11 @@ class MenuItem:
 		else:
 			# If the target is a page reference (eg. 'page.home'),
 			# resolve the url and return that instead.
-			return url_for(self.__target)
+			if self.__kwargs is None:
+				return url_for(self.__target)
+			else:
+				# If there are additional kwargs, return the url with those arguments.
+				return url_for(self.__target, **self.__kwargs)
 
 class MenuSubSection:
 	def __init__(self, name, items):
@@ -67,7 +72,8 @@ item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public con
 
 # Learn
 item_writeups = MenuItem("Writeups", 'page.writeups')
-item_writeupcollections = MenuItem("Collections", 'page.writeup_collections')
+item_writeup_collections = MenuItem("Collections", 'page.writeup_collections')
+item_new_writeup = MenuItem("New Writeup", "page.new_writeup")
 
 # Options
 item_login = MenuItem("Login", "page.login")
@@ -75,7 +81,8 @@ item_logout = MenuItem("Logout", "page.logout")
 item_profile = MenuItem("Profile", "page.profile")
 
 # Posts
-item_announcements = MenuItem("Announcements", "page.posts")
+item_announcements = MenuItem("Announcements", "page.posts", type="Post.Announcement")
+item_new_announcement = MenuItem("New Announcement", "page.new_announcement")
 
 # Play
 item_scoreboard = MenuItem("Scoreboard", "#", is_url=True)
@@ -94,11 +101,12 @@ subsection_inhouse = MenuSubSection("In House", [item_scoreboard])
 subsection_curated = MenuSubSection("Curated", [item_dummy])
 subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
 subsection_read = MenuSubSection("Read", [item_announcements])
-subsection_writups = MenuSubSection("Read", [item_writeups, item_writeupcollections])
+subsection_write = MenuSubSection("Write", [item_new_announcement])
+subsection_writups = MenuSubSection("Read", [item_writeups, item_writeup_collections])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
 
 # ----- MENU SECTIONS -----
-section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_read])
+section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_read, subsection_write])
 section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection_latest, subsection_inhouse, subsection_curated])
 section_skills = MenuSection("Skills", "section_skills", "fa-flask", [subsection_skilltree])
 section_writeups = MenuSection("Writeups", "section_writeups", "fa-book", [subsection_writups])
