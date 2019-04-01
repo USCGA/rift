@@ -71,7 +71,7 @@ item_team = MenuItem("Team", "#", is_url=True) # TODO Implement public team page
 item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public contact page
 
 # Learn
-item_writeups = MenuItem("Writeups", 'page.writeups')
+item_writeups = MenuItem("Writeups", 'page.posts', type="Writeup")
 item_writeup_collections = MenuItem("Collections", 'page.writeup_collections')
 item_new_writeup = MenuItem("New Writeup", "page.new_writeup")
 
@@ -81,7 +81,7 @@ item_logout = MenuItem("Logout", "page.logout")
 item_profile = MenuItem("Profile", "page.profile")
 
 # Posts
-item_announcements = MenuItem("Announcements", "page.posts", type="Post.Announcement")
+item_announcements = MenuItem("Announcements", "page.posts", type="Announcement")
 item_new_announcement = MenuItem("New Announcement", "page.new_announcement")
 
 # Play

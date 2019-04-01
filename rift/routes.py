@@ -68,7 +68,7 @@ def posts():
 	typeArg = request.args.get('type', type = str)
 	authorArg = request.args.get('author', type = str)
 	if typeArg is not None:
-		postsQuerySet = postsQuerySet(_cls=typeArg)
+		postsQuerySet = postsQuerySet(_cls="Post." + typeArg)
 	if authorArg is not None:
 		try:
 			# We have to try here, because specified user might not exist.
@@ -90,7 +90,7 @@ def new_announcement():
 		newAnnouncement.title = request.form['announcementTitle']
 		newAnnouncement.content = request.form['announcementContent']
 		newAnnouncement.save()
-		return redirect(url_for('page.posts',type="Post.Announcement"))
+		return redirect(url_for('page.posts',type="Announcement"))
 	return render_template('rift_new_announcement.html', menu=nav.menu_main, user=g.user)
 
 # Rift New Writeup Page #TODO Make html for this page.
@@ -150,7 +150,7 @@ def post(id):
 		# User must be the document's author to delete. #TODO Add admin perms
 		if (deleteArg == True and g.user == postDocument.author):
 			postDocument.delete()
-			return redirect(url_for('page.posts'))
+			return redirect(url_for('page.posts', type=postDocument._cls[5:]))
 	# POST
 	if request.method == 'POST':
 		# User must be the document's author to edit. #TODO Add admin perms
