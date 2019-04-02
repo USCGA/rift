@@ -1,5 +1,5 @@
 ﻿from flask import Blueprint, render_template, request, \
-	escape, session, redirect, url_for, Response, g
+	escape, session, redirect, url_for, Response, g, abort
 from functools import wraps
 import rift.nav as nav
 import rift.models as models
@@ -27,6 +27,7 @@ def login_required(f):
 
 ### ROUTES ###
 
+# ---------------------- Before Request ----------------------
 # Before each request
 @main.before_request
 def get_user():
@@ -39,7 +40,19 @@ def get_user():
 			return
 	else:
 		return
+# ------------------------------------------------------------
 
+
+# ---------------------- Error Handlers ----------------------
+# 404
+@main.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return "404", 404
+# ------------------------------------------------------------
+
+
+# --------------------------- Pages --------------------------
 # Homepage
 @main.route("/")
 def home():
@@ -143,7 +156,10 @@ def writeup_collections():
 @main.route("/posts/<id>", methods=['GET','POST'])
 @login_required
 def post(id):
-	postDocument = models.Post.objects.get(id=id)
+	try:
+		postDocument = models.Post.objects.get(id=id)
+	except:
+		abort(404)
 	# GET
 	if request.method == 'GET':
 		deleteArg = request.args.get('delete', default = False, type = bool)
@@ -217,3 +233,4 @@ def register():
 def logout():
 	session.clear()
 	return redirect(url_for('page.home'))
+# ------------------------------------------------------------
