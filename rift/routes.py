@@ -107,10 +107,20 @@ def new_announcement():
 	return render_template('rift_new_announcement.html', menu=nav.menu_main, user=g.user)
 
 # Rift New Writeup Page #TODO Make html for this page.
-@main.route("/new-writeup")
+@main.route("/new-writeup", methods=['GET','POST'])
 @login_required
 def new_writeup():
-	return render_template('rift_new_announcement.html', menu=nav.menu_main, user=g.user)
+	collections = models.WriteupCollection.objects
+	# POST
+	if request.method == 'POST':
+		newWriteup = models.Writeup()
+		newWriteup.author = g.user
+		newWriteup.title = request.form['writeupTitle']
+		newWriteup.content = request.form['writeupContent']
+		newWriteup.collection = models.WriteupCollection.objects.get(id=request.form['writeupCollection'])
+		newWriteup.save()
+		return redirect(url_for('page.posts',type="Writeup"))
+	return render_template('rift_new_writeup.html', menu=nav.menu_main, user=g.user, collections=collections)
 
 # Rift Writeups Page
 @main.route("/writeups", methods=['GET','POST'])
