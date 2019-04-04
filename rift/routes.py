@@ -136,15 +136,6 @@ def writeups():
 			writeupQuerySet = writeupQuerySet(author=selAuthor)
 		except:
 			writeupQuerySet = []
-
-	# POST
-	if request.method == 'POST':
-		newWriteup = models.Writeup()
-		newWriteup.author = g.user
-		newWriteup.title = request.form['writeupTitle']
-		newWriteup.content = request.form['writeupContent']
-		newWriteup.collection = models.WriteupCollection.objects.get(id=request.form['writeupCollection'])
-		newWriteup.save()
 	return render_template('rift_writeups.html', menu=nav.menu_main, user=g.user, posts=writeupQuerySet, collections=collections)
 
 # Rift Writeup Collections

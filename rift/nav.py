@@ -71,7 +71,7 @@ item_team = MenuItem("Team", "#", is_url=True) # TODO Implement public team page
 item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public contact page
 
 # Learn
-item_writeups = MenuItem("Writeups", 'page.posts', type="Writeup")
+item_writeups = MenuItem("Writeups", 'page.writeups')
 item_writeup_collections = MenuItem("Collections", 'page.writeup_collections')
 item_new_writeup = MenuItem("New Writeup", "page.new_writeup")
 
@@ -102,7 +102,7 @@ subsection_curated = MenuSubSection("Curated", [item_dummy])
 subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
 subsection_read = MenuSubSection("Read", [item_announcements])
 subsection_write = MenuSubSection("Write", [item_new_announcement])
-subsection_writups = MenuSubSection("Read", [item_writeups, item_writeup_collections])
+subsection_writups = MenuSubSection("Read", [item_writeups, item_writeup_collections, item_new_writeup])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
 
 # ----- MENU SECTIONS -----
