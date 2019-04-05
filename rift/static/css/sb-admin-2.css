@@ -132,7 +132,8 @@ dd {
 }
 
 blockquote {
-  margin: 0 0 1rem;
+  /* CHANGE 0 0 1rem */
+  margin: 0 2rem 0rem;
 }
 
 b,

@@ -21,24 +21,30 @@
 			<div class="card-header py-3">
 				<h6 class="m-0 font-weight-bold">Metadata</h6>
 			</div>
-			<form id="newWriteup" action="" method='post' class="d-sm-flex">
-				<div class="card-body d-sm-flex-block">
-					<div class="col-md-12">
-						<div class="small mb-1">Title:</div>
-						<input name="writeupTitle" type="text" class="form-control">
-					</div>
-				</div>
-				<div class="card-body d-sm-flex-block">
-					<div class="col-md-12">
-						<div class="small mb-1">Collection:</div>
-						<select name="writeupCollection" type="text">
-							% for collection in collections
-							<option value="{{ collection.id }}">{{ collection.name }}</option>
-							% endfor
-						</select>
-					</div>
-				</div>
-			</form>
+            <form id="newWriteup" action="" method='post' class="d-sm-flex">
+                <div class="card-body d-sm-flex-block">
+                    <div class="col-md-12">
+                        <div class="small mb-1">Title:</div>
+                        <input name="writeupTitle" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="card-body d-sm-flex-block">
+                    <div class="col-md-12">
+                        <div class="small mb-1">Category:</div>
+                        <input name="writeupCategory" type="text" class="form-control" placeholder="e.g. Forensics">
+                    </div>
+                </div>
+                <div class="card-body d-sm-flex-block">
+                    <div class="col-md-12">
+                        <div class="small mb-1">Collection:</div>
+                        <select name="writeupCollection" type="text">
+                            % for collection in collections
+                            <option value="{{ collection.id }}">{{ collection.name }}</option>
+                            % endfor
+                        </select>
+                    </div>
+                </div>
+            </form>
 		</div>
 	</div>
 	<div class="col-lg-2">

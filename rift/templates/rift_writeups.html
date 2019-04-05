@@ -13,49 +13,25 @@
 	<div class="h5 mb-0 text-gray-800">
 		Collections
 	</div>
-	<a href="{{ url_for('page.writeup_collections') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-folder-open fa-sm text-white-50"></i> View All</a>
+	<a href="{{ url_for('page.collections') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-folder-open fa-sm text-white-50"></i> View All</a>
 </div>
 
 <div class="row">
 	<div class="col-lg">
 		<div class="card mb-4 flex-sm-wrap pl-3" style="background-color:transparent; border-color:darkslateblue">
 			<div class="row">
-					<div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
-						<a href="#" style="text-decoration: none; color:inherit">
-							<div class="card-body">
-								<span class="fas fa-folder mr-1"></span>
-								PicoCTF
-								<div class="text-white-50 small">2019</div>
-							</div>
-						</a>
-					</div>
-					<div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
-						<a href="#" style="text-decoration: none; color:inherit">
-							<div class="card-body">
-								<span class="fas fa-folder mr-1"></span>
-								PicoCTF
-								<div class="text-white-50 small">2019</div>
-							</div>
-						</a>
-					</div>
-					<div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
-						<a href="#" style="text-decoration: none; color:inherit">
-							<div class="card-body">
-								<span class="fas fa-folder mr-1"></span>
-								PicoCTF
-								<div class="text-white-50 small">2019</div>
-							</div>
-						</a>
-					</div>
-					<div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
-						<a href="#" style="text-decoration: none; color:inherit">
-							<div class="card-body">
-								<span class="fas fa-folder mr-1"></span>
-								PicoCTF
-								<div class="text-white-50 small">2019</div>
-							</div>
-						</a>
-					</div>
+                <!-- Collection Card -->
+                % for collection in collections
+				<div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
+					<a href="{{ url_for('page.collection', id=collection.id) }}" style="text-decoration: none; color:inherit">
+						<div class="card-body">
+							<span class="fas fa-folder mr-1"></span>
+							{{ collection.name }}
+							<div class="text-white-50 small">{{ collection.year }}</div>
+						</div>
+					</a>
+				</div>
+                % endfor
 			</div>
 		</div>
 	</div>			

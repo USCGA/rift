@@ -72,7 +72,7 @@ item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public con
 
 # Learn
 item_writeups = MenuItem("Writeups", 'page.writeups')
-item_writeup_collections = MenuItem("Collections", 'page.writeup_collections')
+item_writeup_collections = MenuItem("Collections", 'page.collections')
 item_new_writeup = MenuItem("New Writeup", "page.new_writeup")
 
 # Options

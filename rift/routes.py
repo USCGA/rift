@@ -117,6 +117,7 @@ def new_writeup():
 		newWriteup.author = g.user
 		newWriteup.title = request.form['writeupTitle']
 		newWriteup.content = request.form['writeupContent']
+		newWriteup.category = request.form['writeupCategory']
 		newWriteup.collection = models.WriteupCollection.objects.get(id=request.form['writeupCollection'])
 		newWriteup.save()
 		return redirect(url_for('page.posts',type="Writeup"))
@@ -126,8 +127,8 @@ def new_writeup():
 @main.route("/writeups", methods=['GET','POST'])
 @login_required
 def writeups():
-	collections = models.WriteupCollection.objects
-	writeupQuerySet = models.Writeup.objects.order_by('-date')
+	collections = models.WriteupCollection.objects.limit(15)
+	writeupQuerySet = models.Writeup.objects.order_by('-date').limit(5)
 	authorArg = request.args.get('author', type = str)
 	if authorArg is not None:
 		try:
@@ -140,18 +141,38 @@ def writeups():
 
 # Rift Writeup Collections
 # TODO this is currently unimplemented
-@main.route("/writeups/collections", methods=['GET','POST'])
+@main.route("/collections", methods=['GET','POST'])
 @login_required
-def writeup_collections():
+def collections():
 	collectionQuerySet = models.WriteupCollection.objects
 
 	# POST
 	if request.method == 'POST':
 		newCollection = models.WriteupCollection()
 		newCollection.name = request.form['collectionTitle']
+		newCollection.year = request.form['collectionYear']
 		newCollection.link = request.form['collectionLink']
+		newCollection.description = request.form['collectionDescription']
 		newCollection.save()
 	return render_template('rift_writeup_collections.html', menu=nav.menu_main, user=g.user, collections=collectionQuerySet)
+
+# Rift Single Collection Page
+@main.route("/collections/<id>", methods=['GET','POST'])
+@login_required
+def collection(id):
+	try:
+		collection = models.WriteupCollection.objects.get(id=id)
+		writeups = models.Writeup.objects(collection=collection)
+	except:
+		abort(404)
+	# GET
+	if request.method == 'GET':
+		deleteArg = request.args.get('delete', default = False, type = bool)
+		# TODO: Add admin delete perms
+		if (deleteArg == True):
+			collection.delete()
+			return redirect(url_for('page.collections'))
+	return render_template('rift_collection.html', menu=nav.menu_main, user=g.user, collection=collection, writeups=writeups)
 
 # Rift Single Post Page
 @main.route("/posts/<id>", methods=['GET','POST'])

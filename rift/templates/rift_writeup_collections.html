@@ -7,22 +7,26 @@
 	<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>
 </div>
 
-% for collection in collections
 <div class="row">
-    <!-- Post -->
     <div class="col-lg">
-        <div class="card border-left-info shadow mb-4">
-                <div class="card-header py-3">
-					<a href="#"><h6 class="m-0 font-weight-bold text-primary">{{ collection.name }}</h6></a>
-					<div class="mb-0">
-						<span class="font-weight-lighter">{{ collection.link }}</span>
-					</div>
-				</div>
-                
+        <div class="card mb-4 flex-sm-wrap pl-3" style="background-color:transparent; border-color:darkslateblue">
+            <div class="row">
+                <!-- Collection Card -->
+                % for collection in collections
+                <div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
+                    <a href="{{ url_for('page.collection', id=collection.id) }}" style="text-decoration: none; color:inherit">
+                        <div class="card-body">
+                            <span class="fas fa-folder mr-1"></span>
+                            {{ collection.name }}
+                            <div class="text-white-50 small">{{ collection.year }}</div>
+                        </div>
+                    </a>
+                </div>
+                % endfor
+            </div>
         </div>
     </div>
 </div>
-% endfor
 {% endblock %}
 
 {% block modals %}
@@ -36,12 +40,16 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<form id="newCollection" action="" method='post'>
-						<p>Title</p>
-						<input class="mb-3" name="collectionTitle">
-						<p>Link</p>
-						<input class="mb-3" name="collectionLink">
-					</form>
+                    <form id="newCollection" action="" method='post'>
+                        <div>Title</div>
+                        <input class="form-control mb-3" name="collectionTitle" placeholder="e.g. PicoCTF">
+                        <div>Year</div>
+                        <input class="form-control mb-3" name="collectionYear" placeholder="e.g. 2019">
+                        <div>Link</div>
+                        <input class="form-control mb-3" name="collectionLink" placeholder="e.g. https://picoctf.com">
+                        <div>Description</div>
+                        <textarea class="form-control mb-3" name="collectionDescription" placeholder="e.g. PicoCTF is a jeopardy style CTF founded by..."></textarea>
+                    </form>
 				</div>
 				<div class="modal-footer">
 					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>

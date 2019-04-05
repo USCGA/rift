@@ -42,10 +42,10 @@
 				</div>
 				<div class="modal-body">
 					<form id="editPost" action="" method='post'>
-						<p>Title</p>
-						<input class="mb-3" name="postTitle" value="{{ post.title }}">
-						<p>Content</p>
-						<textarea class="text-monospace" name="postContent" form="editPost" style="min-width: 100%; min-height: 300px">{{ post.content }}</textarea>
+						<div>Title</div>
+						<input class="mb-3 form-control" name="postTitle" value="{{ post.title }}">
+						<div>Content</div>
+						<textarea class="text-monospace form-control" name="postContent" form="editPost" style="min-width: 100%; min-height: 300px">{{ post.content }}</textarea>
 					</form>
 				</div>
 				<div class="modal-footer">
