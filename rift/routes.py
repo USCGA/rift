@@ -154,7 +154,7 @@ def collections():
 		newCollection.link = request.form['collectionLink']
 		newCollection.description = request.form['collectionDescription']
 		newCollection.save()
-	return render_template('rift_writeup_collections.html', menu=nav.menu_main, user=g.user, collections=collectionQuerySet)
+	return render_template('rift_collections.html', menu=nav.menu_main, user=g.user, collections=collectionQuerySet)
 
 # Rift Single Collection Page
 @main.route("/collections/<id>", methods=['GET','POST'])
@@ -172,6 +172,15 @@ def collection(id):
 		if (deleteArg == True):
 			collection.delete()
 			return redirect(url_for('page.collections'))
+
+	# POST
+	if request.method == 'POST':
+		collection.name = request.form['collectionName']
+		collection.year = request.form['collectionYear']
+		collection.link = request.form['collectionLink']
+		collection.description = request.form['collectionDescription']
+		collection.save()
+	
 	return render_template('rift_collection.html', menu=nav.menu_main, user=g.user, collection=collection, writeups=writeups)
 
 # Rift Single Post Page

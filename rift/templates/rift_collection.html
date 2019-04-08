@@ -9,8 +9,8 @@
 
 {% block content %}
 <!-- Page Heading -->
-<div class="d-sm-flex align-items-center mb-0">
-	
+<div class="d-sm-flex align-items-center justify-content-end mb-0">
+	<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
 </div>
 <div class="page-body">
     <div class="card mb-4" style="background-color:transparent; border-color:darkslateblue">
@@ -66,6 +66,8 @@
                         <input class="mb-3 form-control" name="collectionYear" value="{{ collection.year }}">
                         <div>Link</div>
                         <input class="mb-3 form-control" name="collectionLink" value="{{ collection.link }}">
+                        <div>Description</div>
+                        <textarea class="form-control mb-3" name="collectionDescription" value="{{ collection.description }}"></textarea>
                     </form>
 				</div>
 				<div class="modal-footer">
