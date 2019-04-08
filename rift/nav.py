@@ -70,6 +70,13 @@ item_publicbulletin = MenuItem("Bulletin", "#", is_url=True) # TODO Implement pu
 item_team = MenuItem("Team", "#", is_url=True) # TODO Implement public team page
 item_contact = MenuItem("Contact", "#", is_url=True) # TODO Implement public contact page
 
+# Bulletin
+item_announcements = MenuItem("Announcements", "page.posts", type="Announcement")
+item_new_announcement = MenuItem("New Announcement", "page.new_announcement")
+
+# Play
+item_scoreboard = MenuItem("Scoreboard", "#", is_url=True)
+
 # Learn
 item_writeups = MenuItem("Writeups", 'page.writeups')
 item_writeup_collections = MenuItem("Collections", 'page.collections')
@@ -79,13 +86,6 @@ item_new_writeup = MenuItem("New Writeup", "page.new_writeup")
 item_login = MenuItem("Login", "page.login")
 item_logout = MenuItem("Logout", "page.logout")
 item_profile = MenuItem("Profile", "page.profile")
-
-# Posts
-item_announcements = MenuItem("Announcements", "page.posts", type="Announcement")
-item_new_announcement = MenuItem("New Announcement", "page.new_announcement")
-
-# Play
-item_scoreboard = MenuItem("Scoreboard", "#", is_url=True)
 
 # Dummy (Subsections can't be empty, so this is necessary during development)
 item_dummy = MenuItem("item_dummy", "#", is_url=True)
@@ -100,16 +100,17 @@ subsection_latest = MenuSubSection("Latest",[item_dummy])
 subsection_inhouse = MenuSubSection("In House", [item_scoreboard])
 subsection_curated = MenuSubSection("Curated", [item_dummy])
 subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
-subsection_read = MenuSubSection("Read", [item_announcements])
-subsection_write = MenuSubSection("Write", [item_new_announcement])
-subsection_writups = MenuSubSection("Read", [item_writeups, item_writeup_collections, item_new_writeup])
+subsection_posts_read = MenuSubSection("Read", [item_announcements])
+subsection_posts_write = MenuSubSection("Create", [item_new_announcement])
+subsection_writeups_read = MenuSubSection("Read", [item_writeups, item_writeup_collections])
+subsection_writeups_write = MenuSubSection("Create", [item_new_writeup])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
 
 # ----- MENU SECTIONS -----
-section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_read, subsection_write])
+section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_posts_read, subsection_posts_write])
 section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection_latest, subsection_inhouse, subsection_curated])
 section_skills = MenuSection("Skills", "section_skills", "fa-flask", [subsection_skilltree])
-section_writeups = MenuSection("Writeups", "section_writeups", "fa-book", [subsection_writups])
+section_writeups = MenuSection("Writeups", "section_writeups", "fa-book", [subsection_writeups_read, subsection_writeups_write])
 section_account = MenuSection("Account", "section_account", "fa-address-card", [subsection_accountsettings, subsection_login])
 
 # ----- MENU CATEGORY -----
