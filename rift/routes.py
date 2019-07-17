@@ -1,9 +1,12 @@
 ﻿from flask import Blueprint, render_template, request, \
-	escape, session, redirect, url_for, Response, g, abort
+	escape, session, redirect, url_for, Response, g, abort, flash, send_from_directory # TODO Move flash required functions into their own file.
 from functools import wraps
+from flask import current_app as app
 import rift.nav as nav
 import rift.models as models
 import rift.user as user
+import rift.containers as containers
+import rift.uploads as uploads
 
 # All routes defined below belong to the "main" blueprint 
 # which is applied to flask.app in __init__.py.
@@ -30,7 +33,7 @@ def login_required(f):
 # ---------------------- Before Request ----------------------
 # Before each request
 @main.before_request
-def get_user():
+def get_user(refresh=False):
 	if 'user' not in g:
 		if 'username' in session:
 			g.user = user.GetUserObject(session)
@@ -39,7 +42,12 @@ def get_user():
 			g.user = None
 			return
 	else:
-		return
+		# The refresh parameter is necessary if g.user needs 
+		# to be updated during a request as well as before.
+		if refresh == True:
+			g.user = user.GetUserObject(session)
+		else:
+			return
 # ------------------------------------------------------------
 
 
@@ -207,11 +215,125 @@ def post(id):
 			postDocument.save()
 	return render_template('rift_post.html', menu=nav.menu_main, user=g.user, post=postDocument)
 
+# Homebrew Page (In house CTF main-page)
+@main.route("/ctf", methods=['GET','POST'])
+@login_required
+def ctfs():
+	ctfQuerySet = models.CTF.objects
+
+	# POST
+	if request.method == 'POST':
+		newCTF = models.CTF()
+		newCTF.name = request.form['ctfTitle']
+		newCTF.description = request.form['ctfDescription']
+		newCTF.author = g.user
+		newCTF.save()
+	return render_template('rift_ctfs.html', menu=nav.menu_main, user=g.user, ctfs=ctfQuerySet)
+
+# Rift Single CTF Page
+@main.route("/ctf/<id>", methods=['GET','POST'])
+@login_required
+def ctf(id):
+	try:
+		ctf = models.CTF.objects.get(id=id)
+		challenges = models.CTFChallenge.objects(ctf=ctf)
+	except:
+		abort(404)
+	# GET
+	if request.method == 'GET':
+		deleteArg = request.args.get('delete', default = False, type = bool)
+		# TODO: Add admin delete perms
+		if (deleteArg == True):
+			ctf.delete()
+			return redirect(url_for('page.ctf'))
+
+	# POST
+	if request.method == 'POST':
+		ctf.name = request.form['ctfName']
+		ctf.description = request.form['ctfDescription']
+		ctf.save()
+	
+	return render_template('rift_ctf.html', menu=nav.menu_main, user=g.user, ctf=ctf, challenges=challenges)
+
+# Rift New Challenge
+@main.route("/new-challenge", methods=['GET','POST'])
+@login_required
+def new_challenge():
+	ctfs = models.CTF.objects(author=g.user)
+	# POST
+	if request.method == 'POST':
+		newChallenge = models.CTFChallenge()
+		newChallenge.title = request.form['challengeTitle']
+		newChallenge.description = request.form['challengeDescription']
+		newChallenge.author = g.user
+		newChallenge.category = request.form['challengeCategory']
+		newChallenge.flag = request.form['challengeFlag']
+		newChallenge.ctf = models.CTF.objects.get(id=request.form['ctf'])
+		newChallenge.point_value = request.form['challengePointValue']
+		if 'challengeFile' in request.files:
+			if request.files['challengeFile'].filename != '':
+				filename = uploads.ctf_files.save(request.files['challengeFile'])
+				newChallenge.filename = filename
+		newChallenge.save()
+		return redirect(url_for('page.ctf',id=newChallenge.ctf.id))
+	return render_template('rift_new_challenge.html', menu=nav.menu_main, user=g.user, ctfs=ctfs)
+
+# Rift Single Challenge Page
+@main.route("/challenges/<id>", methods=['GET','POST'])
+@login_required
+def challenge(id):
+	try:
+		challengeDocument = models.CTFChallenge.objects.get(id=id)
+		if challengeDocument.filename != None:
+			file_url = uploads.ctf_files.url(challengeDocument.filename)
+		else:
+			file_url = None
+	except:
+		abort(404)
+	# GET
+	if request.method == 'GET':
+		deleteArg = request.args.get('delete', default = False, type = bool)
+		# User must be the document's author to delete. #TODO Add admin perms
+		if (deleteArg == True and g.user == challengeDocument.author):
+			if challengeDocument.filename != None:
+				uploads.Delete(uploads.ctf_files, challengeDocument.filename)
+			challengeDocument.delete()
+			return redirect(url_for('page.ctf', id=challengeDocument.ctf.id))
+	# POST
+	if request.method == 'POST':
+		if ('flagSubmission' in request.form):
+			submittedFlag = request.form['flag']
+			if (submittedFlag == challengeDocument.flag):
+				# Score Flag
+				user.ScoreChallenge(g.user, challengeDocument)
+				# Update g.user before the page is displayed again.
+				get_user(refresh=True)
+		elif ('challengeEdit' in request.form and g.user == challengeDocument.author):
+			# User must be the document's author to edit. #TODO Add admin perms
+			challengeDocument.title = request.form['challengeTitle']
+			challengeDocument.point_value = request.form['challengePointValue']
+			challengeDocument.flag = request.form['challengeFlag']
+			challengeDocument.description = request.form['challengeDescription'] #TODO Display formatted markdown
+			challengeDocument.save()
+	return render_template('rift_challenge.html', menu=nav.menu_main, user=g.user, challenge=challengeDocument, file_url=file_url)
+
+# Rift Scoreboard Page
+@main.route("/scoreboard")
+@login_required
+def scoreboard():
+	scoreboardUserDocuments = models.User.objects
+	return render_template('rift_scoreboard.html', menu=nav.menu_main, user=g.user, scoreboard_users=scoreboardUserDocuments)
+
 # Rift Profile Page
 @main.route("/profile")
 @login_required
 def profile():
 	return render_template('rift_profile.html', menu=nav.menu_main, user=g.user)
+
+# Download
+@main.route("/uploads/<path:filename>")
+def download(filename):
+	return send_from_directory(app.config['UPLOADS_DEFAULT_DEST'], filename)
 
 # Login Page
 @main.route("/login", methods=['GET','POST'])
@@ -264,4 +386,7 @@ def register():
 def logout():
 	session.clear()
 	return redirect(url_for('page.home'))
-# ------------------------------------------------------------
+
+@main.route("/admin/status")
+def rift_status():
+	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, mongo_isRunning=containers.mongo.isRunning, containers=containers.Container.list)

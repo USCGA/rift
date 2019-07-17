@@ -75,7 +75,8 @@ item_announcements = MenuItem("Announcements", "page.posts", type="Announcement"
 item_new_announcement = MenuItem("New Announcement", "page.new_announcement")
 
 # Play
-item_scoreboard = MenuItem("Scoreboard", "#", is_url=True)
+item_homebrew_collections = MenuItem("Homebrew CTFs", 'page.ctfs')
+item_scoreboard = MenuItem("Scoreboard", "page.scoreboard")
 
 # Learn
 item_writeups = MenuItem("Writeups", 'page.writeups')
@@ -87,6 +88,9 @@ item_login = MenuItem("Login", "page.login")
 item_logout = MenuItem("Logout", "page.logout")
 item_profile = MenuItem("Profile", "page.profile")
 
+# Admin
+item_rift_status = MenuItem("Status", "page.rift_status")
+
 # Dummy (Subsections can't be empty, so this is necessary during development)
 item_dummy = MenuItem("item_dummy", "#", is_url=True)
 
@@ -97,7 +101,7 @@ guest_menu = [item_home, item_github, item_publicbulletin, item_team, item_conta
 # ----- MENU SUBSECTIONS -----
 subsection_login = MenuSubSection("Login / Logout", [item_login, item_logout])
 subsection_latest = MenuSubSection("Latest",[item_dummy])
-subsection_inhouse = MenuSubSection("In House", [item_scoreboard])
+subsection_inhouse = MenuSubSection("In House", [item_homebrew_collections, item_scoreboard])
 subsection_curated = MenuSubSection("Curated", [item_dummy])
 subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
 subsection_posts_read = MenuSubSection("Read", [item_announcements])
@@ -105,6 +109,7 @@ subsection_posts_write = MenuSubSection("Create", [item_new_announcement])
 subsection_writeups_read = MenuSubSection("Read", [item_writeups, item_writeup_collections])
 subsection_writeups_write = MenuSubSection("Create", [item_new_writeup])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
+subsection_rift_management = MenuSubSection("Management", [item_rift_status])
 
 # ----- MENU SECTIONS -----
 section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_posts_read, subsection_posts_write])
@@ -112,12 +117,13 @@ section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection
 section_skills = MenuSection("Skills", "section_skills", "fa-flask", [subsection_skilltree])
 section_writeups = MenuSection("Writeups", "section_writeups", "fa-book", [subsection_writeups_read, subsection_writeups_write])
 section_account = MenuSection("Account", "section_account", "fa-address-card", [subsection_accountsettings, subsection_login])
+section_rift = MenuSection("Rift", "section_rift", "fa-tools",[subsection_rift_management])
 
 # ----- MENU CATEGORY -----
 category_bulletin = MenuCategory("Bulletin", [section_posts])
 category_play = MenuCategory("Play", [section_ctf])
 category_learn = MenuCategory("Learn", [section_skills, section_writeups])
-category_options = MenuCategory("Options", [section_account])
+category_options = MenuCategory("Options", [section_account, section_rift])
 
 # ----- MENUS -----
 menu_main = Menu([category_bulletin, category_play, category_learn, category_options])

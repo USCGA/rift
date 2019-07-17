@@ -1,0 +1,107 @@
+{% extends "rift_base.html" %}
+
+{% block header %}
+<!-- Syntax Highlighting -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/tomorrow-night-bright.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="page-body">
+	<div class="d-sm-flex align-items-center justify-content-end mb-2">
+		<a href="#" class="btn-sm d-sm-inline-block shadow-sm" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
+	</div>
+
+	<div class="card mb-4" style="background-color:transparent; border-color:darkslateblue">
+		<div class="card-body">
+			<div class="text-center d-sm-flex align-items-end justify-content-between">
+				<div class="h1 mb-0 text-gray-800 text-monospace">{{ ctf.name }}</div>
+				<div class="pl-4 pr-4 pt-2 pb-1 card bg-gradient-warning" style="background-color:transparent; border-bottom-width:thick; border-color:darkgoldenrod; color:black">
+					<span class="fas fa-user"></span>
+					<span class="font-weight-bold text-monospace">{{ ctf.author.username }}</span>
+				</div>
+			</div>
+			<hr style="height:1px; background-color:darkslateblue">
+			<div>
+				{{ ctf.description }}
+			</div>
+		</div>
+	</div>
+
+	<div class="d-sm-flex align-items-center justify-content-between mb-2">
+		<div class="h5 mb-0 text-gray-800">
+			Challenges
+		</div>
+		<a href="{{ url_for('page.new_challenge') }}" class="d-none d-sm-inline-block btn-sm shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>
+	</div>
+
+	<div class="row">
+	% for challenge in challenges
+	% if challenge in user.completed_challenges
+	<div class="card text-white shadow m-2" style="background-color:darkgreen; border-bottom-width:thick; border-color:black">
+	% else
+	<div class="card text-white shadow m-2" style="background-color:darkslateblue; border-bottom-width:thick; border-color:black">
+	% endif
+		<a href="{{ url_for('page.challenge', id=challenge.id) }}" style="text-decoration: none; color:inherit">
+			<div class="card-body">
+				<div class="text-white-50 small text-monospace">{{ challenge.category }}</div>
+				<i class="fas fa-flag mr-1"></i>
+				{{ challenge.title }}
+				<div class="text-white-50 small text-monospace text-right">{{ challenge.point_value }} points</div>
+			</div>
+		</a>
+	</div>
+	% endfor
+
+</div>
+
+{% endblock %}
+
+{% block modals %}
+<!-- Edit CTF Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editModalLabel">Edit CTF</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+                    <form id="editCTF" action="" method='post'>
+                        <div>Title</div>
+                        <input class="mb-3 form-control" name="ctfName" value="{{ ctf.name }}">
+                        <div>Description</div>
+                        <textarea class="text-monospace form-control" name="ctfDescription" form="editCTF" style="min-width: 100%; min-height: 300px">{{ ctf.description }}</textarea>
+                    </form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<input type="submit" class="btn btn-primary" form="editCTF" href="#" value="Done">
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete CTF</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Are you sure you would like to delete this CTF?</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-danger" href="{{ url_for('page.ctf', id=ctf.id, delete=True) }}">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

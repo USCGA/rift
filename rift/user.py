@@ -3,6 +3,7 @@ from passlib.hash import pbkdf2_sha256
 from mongoengine import Document, DoesNotExist, MultipleObjectsReturned, NotUniqueError, ValidationError
 from enum import Enum
 import rift.models as models
+import warnings
 
 # --- Configuration --- #
 # TODO Relocate to a central configuration file
@@ -43,6 +44,13 @@ def GetUserObject(session):
 		return user
 	else:
 		return False
+
+def ScoreChallenge(user, challengeDocument):
+	userDocument = models.User.objects.only('completed_challenges', 'score').get(id=user.id)
+	if (challengeDocument in userDocument.completed_challenges):
+		warnings.warn(user.username + " attempted to score a challenge \"" + challengeDocument.title + "\" twice.", UserWarning, stacklevel=2)
+	else:
+		userDocument.modify(inc__score=challengeDocument.point_value, push__completed_challenges=challengeDocument)
 
 def Login(username, password):
 	'''

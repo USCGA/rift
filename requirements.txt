@@ -1,5 +1,7 @@
 Flask
 Flask-Session
+Flask-Uploads
 Flask-Misaka
 mongoengine
 passlib
+docker

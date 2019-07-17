@@ -1,0 +1,72 @@
+{% extends "rift_base.html" %}
+
+{% block header %}
+<!-- Custom styles for this page -->
+<link href="{{ url_for('static', filename='css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="row justify-content-center">
+    <h1 class="h3 mb-2 text-gray-800">
+        <i class="fas fa-award"></i>
+        
+    </h1>
+</div>
+
+
+<!-- DataTable -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <i class="fas fa-trophy"></i>
+            Standings
+        </h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>Hacker</th>
+                    <th>Name</th>
+                    <th>Flags</th>
+                    <th>Score</th>
+                </tr>
+                </thead>
+                <!-- We're not going to have a footer for now.
+                <tfoot>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Office</th>
+                    <th>Age</th>
+                    <th>Start date</th>
+                    <th>Salary</th>
+                </tr>
+                </tfoot>
+                -->
+                <tbody>
+                    % for user in scoreboard_users
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.lastName }}, {{ user.firstName }}</td>
+                        <td>{{ user.completed_challenges|length }}</td>
+                        <td>{{ user.score }}</td>
+                    </tr>
+                    % endfor
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Page level plugins -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', filename='js/dataTables.bootstrap4.min.js') }}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{{ url_for('static', filename='js/datatables.js') }}"></script>
+{% endblock %}

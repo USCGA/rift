@@ -1,0 +1,22 @@
+{% extends "rift_base.html" %}
+
+{% block content %}
+<h1 class="h3 mb-0 text-gray-800">Backend Status</h1>
+<div>
+    <em>MongoDB:</em>
+    % if mongo_isRunning == true
+    Online
+    % else
+    Offline
+    % endif
+</div>
+<div>
+    <div class="text-primary"><span class="font-weight-bold">Rift</span> Docker Containers:</div>
+    <ul>
+    % for container in containers
+        <li class="text-monospace"><span class="font-weight-bold">{{container.label}}</span>  (cid: {{container.cid}}): <em>{{container.status}}</em></li>
+    % endfor    
+    </ul>
+    
+</div>
+{% endblock %}

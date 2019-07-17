@@ -15,7 +15,7 @@
 				<div class="row no-gutters align-items-center">
 					<div class="col mr-2">
 						<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Score</div>
-						<div class="h5 mb-0 font-weight-bold text-gray-700">41,650</div>
+						<div class="h5 mb-0 font-weight-bold text-gray-700">{{ user.score }}</div>
 						<div>Ranked 5th</div>
 					</div>
 					<div class="col-auto">
@@ -33,8 +33,8 @@
 				<div class="row no-gutters align-items-center">
 					<div class="col mr-2">
 						<div class="text-xs font-weight-bold text-success text-uppercase mb-1">Activity</div>
-						<div>Flags: 67</div>
-						<div>Writeups: 15</div>
+						<div>Flags: {{ user.completed_challenges|length }}</div>
+						<div>Writeups: Not Implemented</div>
 					</div>
 					<div class="col-auto">
 						<i class="fas fa-clock fa-2x text-gray-300"></i>
