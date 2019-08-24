@@ -90,6 +90,7 @@ item_profile = MenuItem("Profile", "page.profile")
 
 # Admin
 item_rift_status = MenuItem("Status", "page.rift_status")
+item_rift_users = MenuItem("User Management", "page.rift_users")
 
 # Dummy (Subsections can't be empty, so this is necessary during development)
 item_dummy = MenuItem("item_dummy", "#", is_url=True)
@@ -109,7 +110,7 @@ subsection_posts_write = MenuSubSection("Create", [item_new_announcement])
 subsection_writeups_read = MenuSubSection("Read", [item_writeups, item_writeup_collections])
 subsection_writeups_write = MenuSubSection("Create", [item_new_writeup])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
-subsection_rift_management = MenuSubSection("Management", [item_rift_status])
+subsection_rift_management = MenuSubSection("Management", [item_rift_status, item_rift_users])
 
 # ----- MENU SECTIONS -----
 section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_posts_read, subsection_posts_write])

@@ -96,7 +96,7 @@
 						<li><span class="font-weight-lighter">{{ post.date.date() }}</span> <span class="font-weight-bold">{{ post.author.firstName }} <span class="text-xs" style="font-family:'Courier New', Courier, monospace">&lt;{{ post.author.username }}&gt;</span> </span> - <a href="{{ url_for('page.post', id=post.id) }}">{{ post.title }}</a></li>
 						% endfor
 					</ul>
-				<a href="{{ url_for('page.posts', type='Post.Announcement') }}">See more ...</a>
+				<a href="{{ url_for('page.posts', type='Announcement') }}">See more ...</a>
 				</div>
 		</div>
 	</div>

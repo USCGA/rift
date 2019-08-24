@@ -3,6 +3,7 @@ from passlib.hash import pbkdf2_sha256
 from mongoengine import Document, DoesNotExist, MultipleObjectsReturned, NotUniqueError, ValidationError
 from enum import Enum
 import rift.models as models
+import rift.permissions as permissions
 import warnings
 
 # --- Configuration --- #
@@ -42,6 +43,19 @@ def GetUserObject(session):
 	if 'username' in session:
 		user = models.User.objects.get(username=session['username'])
 		return user
+	else:
+		return False
+
+def HasPermission(user, permission : permissions.Permission):
+	userDocument = models.User.objects.only('role').get(id=user.id)
+	userRole = userDocument.role
+	try:
+		userPermissions = permissions.Roles[userRole]
+	except:
+		warnings.warn("Bad permissions check for role " + str(userRole) + ": " + str(permission.tag))
+		return False
+	if permission.tag in userPermissions:
+		return True
 	else:
 		return False
 

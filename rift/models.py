@@ -13,6 +13,7 @@ class User(Document):
 	password = StringField(required=True)
 	score = IntField(default=0)
 	completed_challenges = ListField(ReferenceField('CTFChallenge'), reverse_delete_rule=PULL)
+	role = StringField(default='Member')
 
 class Post(Document):
 	title = StringField(max_length=64, required=True)

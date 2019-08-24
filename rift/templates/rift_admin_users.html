@@ -1,0 +1,26 @@
+{% extends "rift_base.html" %}
+
+{% block content %}
+<h1 class="h3 mb-0 text-gray-800">Users</h1>
+<form id="RoleChange" action="" method="POST">
+% for user in users
+<div>
+    {{user.firstName}} {{user.lastName}} &lt;{{user.username}}&gt; 
+    % if user.role == "Admin"
+    <em>Admin</em>
+    % else
+    <select name="{{user.id}}" form="RoleChange">
+        % for role in roles
+        <option value="{{role}}"
+        % if user.role == role
+        selected
+        % endif
+        >{{role}}</option>
+        % endfor
+    </select>
+    % endif
+</div>
+% endfor
+<input type="submit" form="RoleChange" value="Save">
+</form>
+{% endblock %}

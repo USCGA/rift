@@ -2,11 +2,13 @@
 	escape, session, redirect, url_for, Response, g, abort, flash, send_from_directory # TODO Move flash required functions into their own file.
 from functools import wraps
 from flask import current_app as app
+from warnings import warn
 import rift.nav as nav
 import rift.models as models
 import rift.user as user
 import rift.containers as containers
 import rift.uploads as uploads
+import rift.permissions as permissions
 
 # All routes defined below belong to the "main" blueprint 
 # which is applied to flask.app in __init__.py.
@@ -27,7 +29,16 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
+def permission_required(permission : permissions.Permission, methods=['GET','POST']):
+	def decorated_function(f):
+		@wraps(f)
+		def wrapper(*args, **kwargs):
+			if request.method in methods and not user.HasPermission(g.user, permission):
+				return "<h3>You do not have permission to "+ request.method +" this.</h3><p>'" + permission.tag + "' permission required.</p>"
+			else:
+				return f(*args, **kwargs)
+		return wrapper
+	return decorated_function
 ### ROUTES ###
 
 # ---------------------- Before Request ----------------------
@@ -103,6 +114,7 @@ def posts():
 # Rift New Announcement Page
 @main.route("/new-announcement", methods=['GET','POST'])
 @login_required
+@permission_required(permissions.CreateAnnouncements)
 def new_announcement():
 	# POST
 	if request.method == 'POST':
@@ -117,6 +129,7 @@ def new_announcement():
 # Rift New Writeup Page #TODO Make html for this page.
 @main.route("/new-writeup", methods=['GET','POST'])
 @login_required
+@permission_required(permissions.CreateWriteups)
 def new_writeup():
 	collections = models.WriteupCollection.objects
 	# POST
@@ -148,9 +161,9 @@ def writeups():
 	return render_template('rift_writeups.html', menu=nav.menu_main, user=g.user, posts=writeupQuerySet, collections=collections)
 
 # Rift Writeup Collections
-# TODO this is currently unimplemented
 @main.route("/collections", methods=['GET','POST'])
 @login_required
+@permission_required(permissions.CreateWriteups, methods=['POST'])
 def collections():
 	collectionQuerySet = models.WriteupCollection.objects
 
@@ -218,6 +231,7 @@ def post(id):
 # Homebrew Page (In house CTF main-page)
 @main.route("/ctf", methods=['GET','POST'])
 @login_required
+@permission_required(permissions.CreateCTFs, methods=['POST'])
 def ctfs():
 	ctfQuerySet = models.CTF.objects
 
@@ -258,6 +272,7 @@ def ctf(id):
 # Rift New Challenge
 @main.route("/new-challenge", methods=['GET','POST'])
 @login_required
+@permission_required(permissions.CreateCTFs)
 def new_challenge():
 	ctfs = models.CTF.objects(author=g.user)
 	# POST
@@ -390,3 +405,24 @@ def logout():
 @main.route("/admin/status")
 def rift_status():
 	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, mongo_isRunning=containers.mongo.isRunning, containers=containers.Container.list)
+
+# Rift Admin User Page
+# TODO: This is neigh unreadable. There must be a better way to go about this.
+@main.route("/admin/users", methods=['GET','POST'])
+@login_required
+@permission_required(permissions.EditUserRoles)
+def rift_users():
+	userDocuments = models.User.objects
+	roles = []
+	for k in permissions.Roles:
+		if k == "Admin": continue
+		roles.append(k)
+	if request.method == 'POST':
+		for key in request.form:
+			newRole = request.form[key]
+			if newRole in roles:
+				userDocuments.get(id=key).modify(role=newRole)
+			else:
+				warn(g.user.username + " attempted to set " + userDocument.username + "'s role to " + newRole + " which doesn't exist.", UserWarning, stacklevel=2)
+		print("[!] User permissions updated by " + g.user.username)
+	return render_template('rift_admin_users.html', menu=nav.menu_main, user=g.user, users=userDocuments, roles=roles)
