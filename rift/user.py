@@ -64,7 +64,7 @@ def ScoreChallenge(user, challengeDocument):
 	if (challengeDocument in userDocument.completed_challenges):
 		warnings.warn(user.username + " attempted to score a challenge \"" + challengeDocument.title + "\" twice.", UserWarning, stacklevel=2)
 	else:
-		userDocument.modify(inc__score=challengeDocument.point_value, push__completed_challenges=challengeDocument)
+		userDocument.update(inc__score=challengeDocument.point_value, push__completed_challenges=challengeDocument)
 
 def Login(username, password):
 	'''

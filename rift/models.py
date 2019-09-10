@@ -23,7 +23,7 @@ class Post(Document):
 	meta = {'allow_inheritance': True}
 
 class WriteupCollection(Document):
-	name = StringField(max_length=64, unique=True, required=True)
+	name = StringField(max_length=64, unique=False, required=True)
 	description = StringField(max_length=1000, required=True)
 	year = StringField(max_length=12)
 	link = URLField()

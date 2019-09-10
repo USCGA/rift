@@ -269,11 +269,20 @@
 									Logout
 								</a>
 							</div>
+							
 						</li>
-
 					</ul>
-
 				</nav>
+				<div style="background-color: darkorange; color: white">
+					{% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                          {% for message in messages %}
+                            <p>{{ message }}</p>
+                          {% endfor %}
+                        {% endif %}
+                      {% endwith %}
+				</div>
+				
 				<!-- End of Topbar -->
 
 				<!-- Begin Page Content -->

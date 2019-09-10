@@ -3,6 +3,7 @@
 from functools import wraps
 from flask import current_app as app
 from warnings import warn
+import mongoengine.errors
 import rift.nav as nav
 import rift.models as models
 import rift.user as user
@@ -169,12 +170,16 @@ def collections():
 
 	# POST
 	if request.method == 'POST':
-		newCollection = models.WriteupCollection()
-		newCollection.name = request.form['collectionTitle']
-		newCollection.year = request.form['collectionYear']
-		newCollection.link = request.form['collectionLink']
-		newCollection.description = request.form['collectionDescription']
-		newCollection.save()
+		try:
+			newCollection = models.WriteupCollection()
+			newCollection.name = request.form['collectionTitle']
+			newCollection.year = request.form['collectionYear']
+			newCollection.link = request.form['collectionLink']
+			newCollection.description = request.form['collectionDescription']
+			newCollection.save()
+		except mongoengine.errors.ValidationError as ValidationError:
+			flash(ValidationError.message)
+		
 	return render_template('rift_collections.html', menu=nav.menu_main, user=g.user, collections=collectionQuerySet)
 
 # Rift Single Collection Page
@@ -421,8 +426,8 @@ def rift_users():
 		for key in request.form:
 			newRole = request.form[key]
 			if newRole in roles:
-				userDocuments.get(id=key).modify(role=newRole)
+				userDocuments.get(id=key).update(role=newRole)
 			else:
-				warn(g.user.username + " attempted to set " + userDocument.username + "'s role to " + newRole + " which doesn't exist.", UserWarning, stacklevel=2)
+				warn(g.user.username + " attempted to set " + userDocuments.get(id=key).username + "'s role to " + newRole + " which doesn't exist.", UserWarning, stacklevel=2)
 		print("[!] User permissions updated by " + g.user.username)
 	return render_template('rift_admin_users.html', menu=nav.menu_main, user=g.user, users=userDocuments, roles=roles)

@@ -32,4 +32,4 @@ class Container:
 
 # Get MongoDB Container #TODO Do not hardcode docker container ID.
 # This is for testing only. Program will fail if this is not the MongoDB cid.
-mongo = Container("MongoDB", '0c6320a29850')
+mongo = Container("MongoDB", 'rift_database')

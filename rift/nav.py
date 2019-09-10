@@ -93,7 +93,7 @@ item_rift_status = MenuItem("Status", "page.rift_status")
 item_rift_users = MenuItem("User Management", "page.rift_users")
 
 # Dummy (Subsections can't be empty, so this is necessary during development)
-item_dummy = MenuItem("item_dummy", "#", is_url=True)
+item_dummy = MenuItem("Not implemented", "#", is_url=True)
 
 # ----- MENU ITEM Collections ------
 # (This is necessary for the landing pages at "/")
