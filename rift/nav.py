@@ -1,4 +1,5 @@
 from flask import current_app, url_for
+import rift.permissions as permissions
 # Navigation Menus
 # menu > category > section > subsection > item
 # (Menus have categories have sections have subsections have items.)
@@ -6,11 +7,12 @@ from flask import current_app, url_for
 # ----- MENU CLASSES -----
 
 class MenuItem:
-	def __init__(self, name, target, *, is_url=False, **kwargs):
+	def __init__(self, name, target, *, is_url=False, permission=None, **kwargs):
 		"""Defines name and page for each menu item."""
 		self.name = name
 		self.__target = target
 		self.is_url = is_url
+		self.permission = permission
 		self.__kwargs = kwargs
 
 	# This function is kind of a hack. It allows url_for to be computed during a request.
@@ -37,13 +39,13 @@ class MenuItem:
 				return url_for(self.__target, **self.__kwargs)
 
 class MenuSubSection:
-	def __init__(self, name, items):
+	def __init__(self, name, items, permission=None):
 		"""Menu items are sorted into sections"""
 		self.name = name
 		self.items = items
 
 class MenuSection:
-	def __init__(self, name, id, fa_icon, subsections):
+	def __init__(self, name, id, fa_icon, subsections, permission=None):
 		"""Menu items are sorted into sections"""
 		self.name = name
 		self.id = id # Used for template targetdata
@@ -51,13 +53,13 @@ class MenuSection:
 		self.subsections = subsections
 
 class MenuCategory:
-	def __init__(self, name, sections):
+	def __init__(self, name, sections, permission=None):
 		"""Menu sections are sorted into menu categories"""
 		self.name = name
 		self.sections = sections
 
 class Menu:
-	def __init__(self, categories):
+	def __init__(self, categories, permission=None):
 		"""Menu categories are sorted into menus"""
 		self.categories = categories
 
@@ -128,3 +130,23 @@ category_options = MenuCategory("Options", [section_account, section_rift])
 
 # ----- MENUS -----
 menu_main = Menu([category_bulletin, category_play, category_learn, category_options])
+
+### FUNCTIONS
+# UNTESTED
+def GetMenuByRole(self, roleName : str):
+	menu = menu_main
+	role = permissions.Role.Get(roleName)
+
+	for category in menu.categories:
+		for section in category.sections:
+			for subsection in section.subsections:
+				for item in subsection.items:
+					if not role.HasPermission(item.permission):
+						subsection.items.remove(item)
+				if len(subsection.items) == 0:
+					section.subsections.remove(subsection)
+			if len(section.subsections) == 0:
+				category.sections.remove(section)
+		if len(category.sections) == 0:
+			menu.categories.remove(category)
+	return menu

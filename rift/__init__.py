@@ -4,7 +4,7 @@ from flask_misaka import Misaka
 from rift.routes import main
 import flask_uploads
 import rift.db
-import rift.containers
+#import rift.containers
 import rift.uploads
 import secrets
 

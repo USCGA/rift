@@ -1,9 +1,36 @@
+from collections.abc import Mapping
 #TODO: This is wonky. Look for a better way to store permissions structure.
 
 class Permission: 
-    def __init__(self, tag, description):
-        self.tag = tag
-        self.description = description
+	def __init__(self, tag, description):
+		self.tag = tag
+		self.description = description
+
+class Role:
+	__roles : dict = {}
+
+	def __init__(self, name, permissions : set):
+		self.name = name
+		self.permissions = permissions
+		self.__class__.__roles.update({name: self})
+		print("[+] Loaded Permissions '" + name + "' Role. " + str(len(self.__class__.__roles)))
+
+	def HasPermission(self, permission : Permission):
+		if(permission in self.permissions or permission is None):
+			return True
+		else:
+			return False
+
+	def Get(roleName: str):
+		try:
+			return Role.__roles[roleName]
+		except KeyError as e:
+			print("[!] There is no role by the name of '" + roleName + "'. Returning guest role.")
+			return Role("Guest", {})
+
+	def List():
+		return Role.__roles
+		
 
 # PERMISSIONS
 CreateWriteups = Permission('CreateWriteups', "Allows the user to create, edit, and delete their own Writeups.")
@@ -16,41 +43,41 @@ CreateAnnouncements = Permission('CreateAnnouncements', "Allows the user to crea
 ModerateAnnouncements = Permission('ModerateAnnouncements', "Allows the user to edit and delete other's Announcements.")
 
 EditUserRoles = Permission('EditUserRoles', "Allows the user to edit the permission roles of all non-admin users.")
-# PERMISSION SETS
 
-# Members can view all content and create writups.
-Member = set([
-    CreateWriteups.tag
-    ])
+# ROLES
+Role("Guest", {})
 
-# Architects are members with permission to make CTFs.
-Architect = set([
-    CreateCTFs.tag
-    ]).union(Member)
+Role("Member", {
+	CreateWriteups
+})
 
-# Deputies are members with permission to make CTFs and announcements.
-Deputy = set([
-    CreateAnnouncements.tag
-    ]).union(Architect)
+Role("Architect", {
+	CreateWriteups,
+	CreateCTFs
+})
 
-# Team Captains can moderate (edit/remove) all user-generated content.
-# They may also make announcements and CTFs.
-Captain = set([
-    ModerateWriteups.tag,
-    ModerateCTFs.tag,
-    ModerateAnnouncements.tag,
-    EditUserRoles.tag
-    ]).union(Deputy)
+Role("Deputy", {
+	CreateWriteups,
+	CreateCTFs,
+	CreateAnnouncements
+})
 
-# This role is reserved for individuals maintaining the application and
-# should have all permissions.
-Admin = set().union(Captain)
+Role("Captain", {
+	CreateWriteups,
+	CreateCTFs,
+	CreateAnnouncements,
+	ModerateWriteups,
+	ModerateCTFs,
+	ModerateAnnouncements,
+	EditUserRoles
+})
 
-# This is allows permission sets to be accessed by role name.
-Roles = {
-    "Admin": Admin,
-    "Captain": Captain,
-    "Deputy": Deputy,
-    "Architect": Architect,
-    "Member": Member
-}
+Role("Admin", {
+	CreateWriteups,
+	CreateCTFs,
+	CreateAnnouncements,
+	ModerateWriteups,
+	ModerateCTFs,
+	ModerateAnnouncements,
+	EditUserRoles
+})

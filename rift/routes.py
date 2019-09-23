@@ -7,7 +7,8 @@ import mongoengine.errors
 import rift.nav as nav
 import rift.models as models
 import rift.user as user
-import rift.containers as containers
+# Disabled until connecting to docker service from within container is possible.
+# import rift.containers as containers
 import rift.uploads as uploads
 import rift.permissions as permissions
 
@@ -409,7 +410,7 @@ def logout():
 
 @main.route("/admin/status")
 def rift_status():
-	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, mongo_isRunning=containers.mongo.isRunning, containers=containers.Container.list)
+	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, mongo_isRunning="Not Implemented", containers=["Not Implelented"])
 
 # Rift Admin User Page
 # TODO: This is neigh unreadable. There must be a better way to go about this.
@@ -419,8 +420,8 @@ def rift_status():
 def rift_users():
 	userDocuments = models.User.objects
 	roles = []
-	for k in permissions.Roles:
-		if k == "Admin": continue
+	for k in permissions.Role.List():
+		if k == permissions.Role.Get("Admin"): continue
 		roles.append(k)
 	if request.method == 'POST':
 		for key in request.form:
