@@ -16,6 +16,5 @@ RUN python3 -m pip install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "python3" ]
-
-CMD [ "run_dev.py" ]
+CMD [ "source", "venv/bin/activate" ]
+CMD [ "gunicorn", "--workers=4", "--bind=0.0.0.0:8000", "run:app" ]

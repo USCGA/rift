@@ -5,3 +5,4 @@ Flask-Misaka
 mongoengine
 passlib
 docker
+gunicorn
