@@ -1,5 +1,9 @@
 # MongoData
 .mongoData/
+mongo_data/
+
+# Uploads
+uploads/
 
 # venv
 env/
