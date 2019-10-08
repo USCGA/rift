@@ -36,7 +36,7 @@
 				% if file_url != None
 				<a href="{{ file_url }}">Download File</a>
 				% endif
-				<div>{{ challenge.description|markdown(fenced_code=true, underline=true, tables=true, math=true) }} </div>
+				<div>{{ challenge.description|markdown(fenced_code=true, underline=true, tables=true, math=true, no_html=true) }} </div>
 			</div>
 		</div>
 		<!-- Flag Submission Card -->
