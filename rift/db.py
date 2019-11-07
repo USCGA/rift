@@ -1,5 +1,5 @@
 ﻿import mongoengine
 
 print("[i] Connecting to database.")
-connection = mongoengine.connect('rift', host='mongo')
+connection = mongoengine.connect('rift', host='localhost')
 

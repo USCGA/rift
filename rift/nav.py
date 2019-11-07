@@ -103,33 +103,21 @@ guest_menu = [item_home, item_github, item_publicbulletin, item_team, item_conta
 
 # ----- MENU SUBSECTIONS -----
 subsection_login = MenuSubSection("Login / Logout", [item_login, item_logout])
-subsection_latest = MenuSubSection("Latest",[item_dummy])
 subsection_inhouse = MenuSubSection("In House", [item_homebrew_collections, item_scoreboard])
-subsection_curated = MenuSubSection("Curated", [item_dummy])
-subsection_skilltree = MenuSubSection("Skill Tree", [item_dummy])
-subsection_posts_read = MenuSubSection("Read", [item_announcements])
-subsection_posts_write = MenuSubSection("Create", [item_new_announcement])
-subsection_writeups_read = MenuSubSection("Read", [item_writeups, item_writeup_collections])
-subsection_writeups_write = MenuSubSection("Create", [item_new_writeup])
 subsection_accountsettings = MenuSubSection("Account Settings", [item_profile])
 subsection_rift_management = MenuSubSection("Management", [item_rift_status, item_rift_users])
 
 # ----- MENU SECTIONS -----
-section_posts = MenuSection("Posts", "section_posts", "fa-comments", [subsection_posts_read, subsection_posts_write])
-section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection_latest, subsection_inhouse, subsection_curated])
-section_skills = MenuSection("Skills", "section_skills", "fa-flask", [subsection_skilltree])
-section_writeups = MenuSection("Writeups", "section_writeups", "fa-book", [subsection_writeups_read, subsection_writeups_write])
+section_ctf = MenuSection("CTF", "section_ctf", "fa-flag-checkered", [subsection_inhouse])
 section_account = MenuSection("Account", "section_account", "fa-address-card", [subsection_accountsettings, subsection_login])
 section_rift = MenuSection("Rift", "section_rift", "fa-tools",[subsection_rift_management])
 
 # ----- MENU CATEGORY -----
-category_bulletin = MenuCategory("Bulletin", [section_posts])
 category_play = MenuCategory("Play", [section_ctf])
-category_learn = MenuCategory("Learn", [section_skills, section_writeups])
 category_options = MenuCategory("Options", [section_account, section_rift])
 
 # ----- MENUS -----
-menu_main = Menu([category_bulletin, category_play, category_learn, category_options])
+menu_main = Menu([category_play, category_options])
 
 ### FUNCTIONS
 # UNTESTED
