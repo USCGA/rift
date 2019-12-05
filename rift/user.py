@@ -1,4 +1,4 @@
-from flask import flash, session
+from flask import flash, session, abort
 from passlib.hash import pbkdf2_sha256
 from mongoengine import Document, DoesNotExist, MultipleObjectsReturned, NotUniqueError, ValidationError
 from enum import Enum
@@ -60,6 +60,18 @@ def HasPermission(user, permission : permissions.Permission):
 	userDocument = models.User.objects.only('role').get(id=user.id)
 	role = permissions.Role.Get(userDocument.role)
 	if role.HasPermission(permission):
+		return True
+	else:
+		return False
+
+def HasCTFOwnership(user, ctfID):
+	try:
+		userDocument = models.User.objects.get(id=user.id)
+		ctfDocument = models.CTF.objects.only('author').get(id=ctfID)
+	except DoesNotExist:
+		abort(400)
+	
+	if ctfDocument.author == userDocument:
 		return True
 	else:
 		return False

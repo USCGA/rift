@@ -9,10 +9,12 @@
 
 {% block content %}
 <div class="d-sm-flex align-items-center justify-content-between mb-2">
-		<a href="{{ url_for('page.ctf', id=challenge.ctf.id) }}" class="btn-sm shadow-sm btn-secondary d-sm-inline-block">Back</a>
+		<a href="{{ url_for('page.ctf', id=challenge.ctf.id) }}" class="btn-sm d-sm-inline-block shadow-sm"><i class="fas fa-arrow-left fa-sm text-white-50"></i> Back</a>
 	<div>
-		<a href="#" class="d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editModal"><i class="fas fa-align-left fa-sm text-white-50"></i> Edit</a>
-		<a href="#" class="d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+		% if canEdit
+		<a href="{{ url_for('page.challenge_editor', id=challenge.id) }}" class="btn-sm d-sm-inline-block shadow-sm" ><i class="fas fa-align-left fa-sm text-white-50"></i> Edit</a>
+		<a href="#" class="btn-sm d-sm-inline-block shadow-sm" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+		% endif
 	</div>
 </div>
 
@@ -73,36 +75,6 @@
 {% endblock %}
 
 {% block modals %}
-<!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="editModalLabel">Edit Challenge</h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form id="editChallenge" action="" method='post'>
-						<div>Title</div>
-						<input class="mb-3 form-control" name="challengeTitle" value="{{ challenge.title }}">
-						<div>Point Value</div>
-						<input class="mb-3 form-control" type="number" name="challengePointValue" min="0" max="10000" value="{{ challenge.point_value }}">
-						<div>Flag</div>
-						<input class="mb-3 form-control" type="text" name="challengeFlag" value="{{ challenge.flag }}">
-						<div>Description</div>
-						<textarea class="text-monospace form-control" name="challengeDescription" form="editChallenge" style="min-width: 100%; min-height: 100px">{{ challenge.description }}</textarea>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-					<input name="challengeEdit" type="submit" class="btn btn-primary" form="editChallenge" href="#" value="Done">
-				</div>
-			</div>
-		</div>
-	</div>
-
 <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">

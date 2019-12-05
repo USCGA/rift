@@ -7,7 +7,9 @@
         <span class="font-weight-bold text-monospace">CAPTURE THE FLAG </span>
         <span class="text-info small font-weight-light font-italic"><i class="fas fa-flag"></i> IN-HOUSE</span>
     </h1>
-	<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>
+    % if canCreate
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>
+    % endif
 </div>
 <div class="mb-4 text-monospace">Content produced by members of our team.</div>
 
@@ -34,28 +36,30 @@
 {% endblock %}
 
 {% block modals %}
+% if canCreate
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="CreateModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="CreateModalLabel">New CTF</h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body">
-                    <form id="newCTF" action="" method='post'>
-                        <div>Title</div>
-                        <input class="form-control mb-3" name="ctfTitle" placeholder="e.g. PicoCTF">
-                        <div>Description</div>
-                        <textarea class="form-control mb-3" name="ctfDescription" placeholder="e.g. PicoCTF is a jeopardy style CTF founded by..."></textarea>
-                    </form>
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-					<input type="submit" class="btn btn-primary" form="newCTF" href="#" value="Create">
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CreateModalLabel">New CTF</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newCTF" action="" method='post'>
+                    <div>Title</div>
+                    <input class="form-control mb-3" name="ctfTitle" placeholder="e.g. CGACTF">
+                    <div>Description</div>
+                    <textarea class="form-control mb-3" name="ctfDescription" placeholder="e.g. CGACTF is a CTF for web and binary enthusiasts..."></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input type="submit" class="btn btn-primary" form="newCTF" href="#" value="Create">
+            </div>
+        </div>
+    </div>
+</div>
+% endif
 {% endblock %}

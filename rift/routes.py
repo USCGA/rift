@@ -11,6 +11,7 @@ import rift.user as user
 # import rift.containers as containers
 import rift.uploads as uploads
 import rift.permissions as permissions
+import rift.api as api
 
 # All routes defined below belong to the "main" blueprint 
 # which is applied to flask.app in __init__.py.
@@ -64,15 +65,6 @@ def get_user(refresh=False):
 # ------------------------------------------------------------
 
 
-# ---------------------- Error Handlers ----------------------
-# 404
-@main.errorhandler(404)
-def page_not_found(e):
-    # note that we set the 404 status explicitly
-    return "404", 404
-# ------------------------------------------------------------
-
-
 # --------------------------- Pages --------------------------
 # Homepage
 @main.route("/")
@@ -99,6 +91,10 @@ def dashboard():
 def ctfs():
 	ctfQuerySet = models.CTF.objects
 
+	canCreate = False
+	if (user.HasPermission(g.user, permissions.CreateCTFs)):
+		canCreate = True
+
 	# POST
 	if request.method == 'POST':
 		newCTF = models.CTF()
@@ -106,7 +102,7 @@ def ctfs():
 		newCTF.description = request.form['ctfDescription']
 		newCTF.author = g.user
 		newCTF.save()
-	return render_template('rift_ctfs.html', menu=nav.menu_main, user=g.user, ctfs=ctfQuerySet)
+	return render_template('rift_ctfs.html', menu=nav.menu_main, user=g.user, ctfs=ctfQuerySet, canCreate = canCreate)
 
 # Rift Single CTF Page
 @main.route("/ctf/<id>", methods=['GET','POST'])
@@ -117,45 +113,89 @@ def ctf(id):
 		challenges = models.CTFChallenge.objects(ctf=ctf)
 	except:
 		abort(404)
+
+	canEdit = False
+
+	# Enable/Disable Edit Controls
+	if (user.HasCTFOwnership(g.user, id) or user.HasPermission(g.user, permissions.ModerateCTFs)):
+		canEdit = True
+
 	# GET
 	if request.method == 'GET':
 		deleteArg = request.args.get('delete', default = False, type = bool)
 		# TODO: Add admin delete perms
 		if (deleteArg == True):
-			ctf.delete()
-			return redirect(url_for('page.ctf'))
+			if (canEdit):
+				ctf.delete()
+				return redirect(url_for('page.ctfs'))
+			else:
+				abort(403)
 
 	# POST
 	if request.method == 'POST':
-		ctf.name = request.form['ctfName']
-		ctf.description = request.form['ctfDescription']
-		ctf.save()
+		if (user.HasCTFOwnership(g.user,id) or user.HasPermission(g.user, permissions.ModerateCTFs)):
+			ctf.name = request.form['ctfName']
+			ctf.description = request.form['ctfDescription']
+			ctf.save()
+		else:
+			abort(403)
 	
-	return render_template('rift_ctf.html', menu=nav.menu_main, user=g.user, ctf=ctf, challenges=challenges)
+	return render_template('rift_ctf.html', menu=nav.menu_main, user=g.user, ctf=ctf, challenges=challenges, canEdit=canEdit)
 
-# Rift New Challenge
-@main.route("/new-challenge", methods=['GET','POST'])
+# Rift Challenge Editor
+@main.route("/chedit", methods=['GET','POST'])
 @login_required
 @permission_required(permissions.CreateCTFs)
-def new_challenge():
-	ctfs = models.CTF.objects(author=g.user)
+def challenge_editor():
+	ctfs = models.CTF.objects(author=g.user).only('name')
+	challenge_id = request.args.get('id')
+
+	if (request.referrer != None):
+		cancelURL = request.referrer
+	else:
+		cancelURL = url_for('page.dashboard')
+
+	# Retrieve challenge if it exists already.
+	if (challenge_id is not None):
+		try:
+			challengeDocument = models.CTFChallenge.objects.get(id=challenge_id)
+			if challengeDocument.filename is not None:
+				file_url = uploads.ctf_files.url(challengeDocument.filename)
+			else:
+				file_url = None
+		except:
+			abort(404)
+	else:
+		challengeDocument = models.CTFChallenge()
+
+	# Abort if there is an owner and the user isn't one.
+	if (g.user == challengeDocument.author or challengeDocument.author == None):
+		pass
+	elif (user.HasPermission(g.user, permissions.ModerateCTFs)):
+		flash("You are editing this challenge as an administrator.")
+		ctfs = models.CTF.objects.only('name')
+	else:
+		abort(403)
+
 	# POST
 	if request.method == 'POST':
-		newChallenge = models.CTFChallenge()
-		newChallenge.title = request.form['challengeTitle']
-		newChallenge.description = request.form['challengeDescription']
-		newChallenge.author = g.user
-		newChallenge.category = request.form['challengeCategory']
-		newChallenge.flag = request.form['challengeFlag']
-		newChallenge.ctf = models.CTF.objects.get(id=request.form['ctf'])
-		newChallenge.point_value = request.form['challengePointValue']
+		challengeDocument.title = request.form['challengeTitle']
+		challengeDocument.description = request.form['challengeDescription']
+		if (challengeDocument.author == None): challengeDocument.author = g.user
+		challengeDocument.category = request.form['challengeCategory']
+		challengeDocument.flag = request.form['challengeFlag']
+		if (user.HasCTFOwnership(g.user, request.form['ctf']) or user.HasPermission(g.user, permissions.ModerateCTFs)):
+			challengeDocument.ctf = models.CTF.objects.get(id=request.form['ctf'])
+		else:
+			abort(403)
+		challengeDocument.point_value = request.form['challengePointValue']
 		if 'challengeFile' in request.files:
 			if request.files['challengeFile'].filename != '':
 				filename = uploads.ctf_files.save(request.files['challengeFile'])
-				newChallenge.filename = filename
-		newChallenge.save()
-		return redirect(url_for('page.ctf',id=newChallenge.ctf.id))
-	return render_template('rift_new_challenge.html', menu=nav.menu_main, user=g.user, ctfs=ctfs)
+				challengeDocument.filename = filename
+		challengeDocument.save()
+		return redirect(url_for('page.challenge',id=challengeDocument.id))
+	return render_template('rift_challenge_editor.html', challenge=challengeDocument, menu=nav.menu_main, user=g.user, ctfs=ctfs, cancelURL=cancelURL)
 
 # Rift Single Challenge Page
 @main.route("/challenges/<id>", methods=['GET','POST'])
@@ -163,21 +203,29 @@ def new_challenge():
 def challenge(id):
 	try:
 		challengeDocument = models.CTFChallenge.objects.get(id=id)
-		if challengeDocument.filename != None:
+		if challengeDocument.filename is not None:
 			file_url = uploads.ctf_files.url(challengeDocument.filename)
 		else:
 			file_url = None
 	except:
 		abort(404)
+
+	canEdit = False
+	# Enable/Disable Edit Controls
+	if (g.user == challengeDocument.author or user.HasCTFOwnership(g.user, challengeDocument.ctf.id) or user.HasPermission(g.user, permissions.ModerateCTFs)):
+		canEdit = True
+	
 	# GET
 	if request.method == 'GET':
 		deleteArg = request.args.get('delete', default = False, type = bool)
-		# User must be the document's author to delete. #TODO Add admin perms
-		if (deleteArg == True and g.user == challengeDocument.author):
-			if challengeDocument.filename != None:
-				uploads.Delete(uploads.ctf_files, challengeDocument.filename)
-			challengeDocument.delete()
-			return redirect(url_for('page.ctf', id=challengeDocument.ctf.id))
+		if (deleteArg == True):
+			if (canEdit):
+				if challengeDocument.filename != None:
+					uploads.Delete(uploads.ctf_files, challengeDocument.filename)
+				challengeDocument.delete()
+				return redirect(url_for('page.ctf', id=challengeDocument.ctf.id))
+			else:
+				abort(403)
 	# POST
 	if request.method == 'POST':
 		if ('flagSubmission' in request.form):
@@ -187,14 +235,7 @@ def challenge(id):
 				user.ScoreChallenge(g.user, challengeDocument)
 				# Update g.user before the page is displayed again.
 				get_user(refresh=True)
-		elif ('challengeEdit' in request.form and g.user == challengeDocument.author):
-			# User must be the document's author to edit. #TODO Add admin perms
-			challengeDocument.title = request.form['challengeTitle']
-			challengeDocument.point_value = request.form['challengePointValue']
-			challengeDocument.flag = request.form['challengeFlag']
-			challengeDocument.description = request.form['challengeDescription'] #TODO Display formatted markdown
-			challengeDocument.save()
-	return render_template('rift_challenge.html', menu=nav.menu_main, user=g.user, challenge=challengeDocument, file_url=file_url)
+	return render_template('rift_challenge.html', menu=nav.menu_main, user=g.user, challenge=challengeDocument, file_url=file_url, canEdit=canEdit)
 
 # Rift Scoreboard Page
 @main.route("/scoreboard")
@@ -268,7 +309,7 @@ def logout():
 
 @main.route("/admin/status")
 def rift_status():
-	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, mongo_isRunning="Not Implemented", containers=["Not Implelented"])
+	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, mongo_isRunning="Not Implemented", containers=["Not Implemented"])
 
 # Rift Admin User Page
 # TODO: This is neigh unreadable. There must be a better way to go about this.

@@ -33,51 +33,22 @@ class Role:
 		
 
 # PERMISSIONS
-CreateWriteups = Permission('CreateWriteups', "Allows the user to create, edit, and delete their own Writeups.")
-ModerateWriteups = Permission('ModerateWriteups', "Allows the user to edit and delete other's Writeups.")
-
 CreateCTFs = Permission('CreateCTFs', "Allows the user to create, edit, and delete their own In-house CTFs, including challenges.")
 ModerateCTFs = Permission('ModerateCTFs', "Allows the user to edit other's CTFs and challenges.")
-
-CreateAnnouncements = Permission('CreateAnnouncements', "Allows the user to create and edit their own Announcements.")
-ModerateAnnouncements = Permission('ModerateAnnouncements', "Allows the user to edit and delete other's Announcements.")
 
 EditUserRoles = Permission('EditUserRoles', "Allows the user to edit the permission roles of all non-admin users.")
 
 # ROLES
 Role("Guest", {})
 
-Role("Member", {
-	CreateWriteups
-})
+Role("Member", {})
 
-Role("Architect", {
-	CreateWriteups,
+Role("Creator", {
 	CreateCTFs
 })
 
-Role("Deputy", {
-	CreateWriteups,
-	CreateCTFs,
-	CreateAnnouncements
-})
-
-Role("Captain", {
-	CreateWriteups,
-	CreateCTFs,
-	CreateAnnouncements,
-	ModerateWriteups,
-	ModerateCTFs,
-	ModerateAnnouncements,
-	EditUserRoles
-})
-
 Role("Admin", {
-	CreateWriteups,
 	CreateCTFs,
-	CreateAnnouncements,
-	ModerateWriteups,
 	ModerateCTFs,
-	ModerateAnnouncements,
 	EditUserRoles
 })

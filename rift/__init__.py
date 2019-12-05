@@ -44,3 +44,23 @@ app.config['MONGODB_PORT'] = 27017
 
 # Configure Routes
 app.register_blueprint(main)
+
+# ---------------------- Error Handlers ----------------------
+# 400
+@app.errorhandler(400)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return "400 ?:(", 400
+
+# 403
+@app.errorhandler(403)
+def page_forbidden(e):
+    # note that we set the 401 status explicitly
+    return "401 >:(", 403
+
+# 404
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return "404 :(", 404
+# ------------------------------------------------------------

@@ -22,16 +22,6 @@ class Post(Document):
 	date = DateTimeField(default=datetime.datetime.utcnow)
 	meta = {'allow_inheritance': True}
 
-class WriteupCollection(Document):
-	name = StringField(max_length=64, unique=False, required=True)
-	description = StringField(max_length=1000, required=True)
-	year = StringField(max_length=12)
-	link = URLField()
-
-class Writeup(Post):
-	category = StringField(max_length=32, required=True)
-	collection = ReferenceField('WriteupCollection', reverse_delete_rule=CASCADE)
-
 class Announcement(Post):
 	pass
 
