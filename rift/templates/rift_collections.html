@@ -1,0 +1,61 @@
+{% extends "rift_base.html" %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+	<h1 class="h3 mb-0 text-gray-800">Writeup Collections</h1>
+	<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>
+</div>
+
+<div class="row">
+    <div class="col-lg">
+        <div class="card mb-4 flex-sm-wrap pl-3" style="background-color:transparent; border-color:darkslateblue">
+            <div class="row">
+                <!-- Collection Card -->
+                % for collection in collections
+                <div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
+                    <a href="{{ url_for('page.collection', id=collection.id) }}" style="text-decoration: none; color:inherit">
+                        <div class="card-body">
+                            <span class="fas fa-folder mr-1"></span>
+                            {{ collection.name }}
+                            <div class="text-white-50 small">{{ collection.year }}</div>
+                        </div>
+                    </a>
+                </div>
+                % endfor
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="CreateModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="CreateModalLabel">New Collection</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+                    <form id="newCollection" action="" method='post'>
+                        <div>Title</div>
+                        <input class="form-control mb-3" name="collectionTitle" placeholder="e.g. PicoCTF">
+                        <div>Year</div>
+                        <input class="form-control mb-3" name="collectionYear" placeholder="e.g. 2019">
+                        <div>Link</div>
+                        <input class="form-control mb-3" name="collectionLink" placeholder="e.g. https://picoctf.com">
+                        <div>Description</div>
+                        <textarea class="form-control mb-3" name="collectionDescription" placeholder="e.g. PicoCTF is a jeopardy style CTF founded by..."></textarea>
+                    </form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<input type="submit" class="btn btn-primary" form="newCollection" href="#" value="Create">
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

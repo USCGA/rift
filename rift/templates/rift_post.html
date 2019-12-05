@@ -1,0 +1,77 @@
+{% extends "rift_base.html" %}
+
+{% block header %}
+<!-- Syntax Highlighting -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/tomorrow-night-bright.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-0">
+	<h1 class="h5 mb-0 text-gray-800 font-weight-lighter">{{ post.title }}</h1>
+	% if post._cls == "Post.Writeup"
+	<h1>Writeup</h1>
+	% endif
+	% if user == post.author
+	<div>
+		<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editModal"><i class="fas fa-align-left fa-sm text-white-50"></i> Edit</a>
+		<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+	</div>
+	% endif
+</div>
+<div>
+	<span class="font-weight-lighter">{{ post.date.date() }}</span> {{ post.author.firstName }} {{ post.author.lastName }} <span class="text-xs" style="font-family:'Courier New', Courier, monospace">&lt;{{ post.author.username }}&gt;</span>
+</div>
+<div class="page-body">
+		{{ post.content|markdown(fenced_code=true, underline=true, tables=true, math=true, no_html=true) }}
+</div>
+{% endblock %}
+
+{% block modals %}
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editModalLabel">Edit Post</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="editPost" action="" method='post'>
+						<div>Title</div>
+						<input class="mb-3 form-control" name="postTitle" value="{{ post.title }}">
+						<div>Content</div>
+						<textarea class="text-monospace form-control" name="postContent" form="editPost" style="min-width: 100%; min-height: 300px">{{ post.content }}</textarea>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<input type="submit" class="btn btn-primary" form="editPost" href="#" value="Done">
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Are you sure you would like to delete this post?</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-danger" href="/posts/{{ post.id }}?delete=True">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

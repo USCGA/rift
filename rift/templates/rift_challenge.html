@@ -1,0 +1,96 @@
+{% extends "rift_base.html" %}
+
+{% block header %}
+<!-- Syntax Highlighting -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/tomorrow-night-bright.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-2">
+		<a href="{{ url_for('page.ctf', id=challenge.ctf.id) }}" class="btn-sm d-sm-inline-block shadow-sm"><i class="fas fa-arrow-left fa-sm text-white-50"></i> Back</a>
+	<div>
+		% if canEdit
+		<a href="{{ url_for('page.challenge_editor', id=challenge.id) }}" class="btn-sm d-sm-inline-block shadow-sm" ><i class="fas fa-align-left fa-sm text-white-50"></i> Edit</a>
+		<a href="#" class="btn-sm d-sm-inline-block shadow-sm" data-toggle="modal" data-target="#deleteModal"><i class="fas fa-trash fa-sm text-white-50"></i> Delete</a>
+		% endif
+	</div>
+</div>
+
+<div class="row">
+
+	<!-- Challenge Card -->
+	<div class="col-lg">
+		<div class="card shadow mb-4">
+			<div class="card-header py-3">
+				<div class="d-sm-flex align-items-center justify-content-between mb-2">
+					<div>
+						<h1 class="m-0 font-weight-bold text-primary">{{ challenge.title }}</h6>
+						<h3 class="text-monospace">&lt;{{ challenge.author.username }}&gt;</h3>
+					</div>
+					<div>
+						<h1>{{ challenge.point_value }}pts</h1>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				% if file_url != None
+				<a href="{{ file_url }}">Download File</a>
+				% endif
+				<div>{{ challenge.description|markdown(fenced_code=true, underline=true, tables=true, math=true, no_html=true) }} </div>
+			</div>
+		</div>
+		<!-- Flag Submission Card -->
+		% if challenge in user.completed_challenges
+		<div class="card shadow bg-gradient-success" style="border: none">
+			<div class="card-body ">
+                <div class="d-sm-flex align-items-center justify-content-between">
+					<div><i class=" fas fa-align-left fa-flag text-white"></i></div>
+					<div class="col-lg text-white">
+						<div>You solved this challenge!</div>
+					</div>
+                </div>
+            </div>
+		</div>
+		% else
+		<div class="card shadow bg-gradient-info" style="border: none">
+			<div class="card-body ">
+                <div class="d-sm-flex align-items-center justify-content-between">
+					<div><i class=" fas fa-align-left fa-flag text-white-50"></i></div>
+					<div class="col-lg">
+						<form id="submitFlag" action="" method='post' class="">
+						<input name="flag" type="text" form="submitFlag" class="form-control text-monospace" placeholder="e.g. RIFT{flag}">
+						</form>
+					</div>
+					<input name="flagSubmission" value="Submit" type="submit" form="submitFlag" class="d-sm-inline-block btn btn-sm btn-info">
+                </div>
+            </div>
+		</div>
+		% endif
+		
+	</div>
+
+</div>
+{% endblock %}
+
+{% block modals %}
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete Challenge</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Are you sure you would like to delete this post?</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-danger" href="/challenges/{{ challenge.id }}?delete=True">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

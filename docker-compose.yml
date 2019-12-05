@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  flask:
+    build: .
+    restart: always
+    ports:
+     - "8000:8000"
+    volumes:
+     - ./uploads:/app/rift/uploads
+  mongo:
+    image: mongo
+    restart: always
+    volumes:
+      - ./mongo_data:/data/db
+    ports:
+      - "27017:27017"

@@ -1,11 +1,29 @@
+# MongoData
+.mongoData/
+mongo_data/
+
+# Uploads
+uploads/
+
 # venv
 env/
+.env/
 venv/
+.venv/
 riftenv/
 
 # vs
 .vs/
 
+# vscode
+.vscode/
+
 # subl
 *.sublime-workspace
 *.sublime-project
+
+# App Secret
+secret.key
+
+# Production
+wsgi.py

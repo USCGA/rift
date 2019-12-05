@@ -1,0 +1,100 @@
+{% extends "rift_base.html" %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+	<h1 class="h3 mb-0 text-gray-800">
+		Writeups
+	</h1>
+	<!--<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#createModal"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>-->
+</div>
+
+<div class="d-sm-flex align-items-center justify-content-between mb-2">
+	<div class="h5 mb-0 text-gray-800">
+		Collections
+	</div>
+	<a href="{{ url_for('page.collections') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-folder-open fa-sm text-white-50"></i> View All</a>
+</div>
+
+<div class="row">
+	<div class="col-lg">
+		<div class="card mb-4 flex-sm-wrap pl-3" style="background-color:transparent; border-color:darkslateblue">
+			<div class="row">
+                <!-- Collection Card -->
+                % for collection in collections
+				<div class="card text-white shadow m-2" style="background-color:darkslateblue; border-color:black">
+					<a href="{{ url_for('page.collection', id=collection.id) }}" style="text-decoration: none; color:inherit">
+						<div class="card-body">
+							<span class="fas fa-folder mr-1"></span>
+							{{ collection.name }}
+							<div class="text-white-50 small">{{ collection.year }}</div>
+						</div>
+					</a>
+				</div>
+                % endfor
+			</div>
+		</div>
+	</div>			
+</div>
+
+<div class="d-sm-flex align-items-center justify-content-between mb-2">
+	<div class="h5 mb-0 text-gray-800">
+		Latest Writeups
+	</div>
+	<a href="{{ url_for('page.new_writeup') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> New</a>
+</div>
+
+% for post in posts
+<div class="row">
+	<!-- Post -->
+	<div class="col-lg">
+		<div class="card shadow mb-2", style="border-left: 0.25rem solid darkslateblue">
+			<div class="card-header py-1">
+				<div class="d-sm-flex align-items-center justify-content-between">
+					<span class="h6 m-0 font-weight-bold">
+						% if post._cls == 'Post.Writeup'
+						<span>{{ post.collection.name }} /</span>
+						% endif
+						<a href="{{ url_for('page.post',id=post.id) }}">{{ post.title }}</a>
+					</span>
+					<span>
+						{{ post._cls[5:] }}
+						<span class="fas fa-clipboard ml-2"></span>
+					</span>
+				</div>
+				<div class="mb-0">
+					<span class="font-weight-lighter">{{ post.date.date() }}</span> {{ post.author.firstName }} {{ post.author.lastName }} <span class="text-xs" style="font-family:'Courier New', Courier, monospace">&lt;{{ post.author.username }}&gt;</span>
+				</div>
+			</div>    
+		</div>
+	</div>
+</div>
+% endfor
+{% endblock %}
+
+{% block modals %}
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="CreateModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="CreateModalLabel">New Announcement</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="newPost" action="" method='post'>
+						<p>Title</p>
+						<input class="mb-3" name="postTitle">
+						<p>Content</p>
+						<textarea class="text-monospace" name="postContent" form="newPost" style="min-width: 100%; min-height: 300px"></textarea>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<input type="submit" class="btn btn-primary" form="newPost" href="#" value="Create">
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

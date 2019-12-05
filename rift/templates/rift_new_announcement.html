@@ -1,0 +1,87 @@
+{% extends "rift_base.html" %}
+
+{% block content %}
+<!-- Page Heading -->
+<h1 class="h3 mb-4 text-gray-800">New
+	<div class="dropdown mb-4 d-sm-inline-block">
+		<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			Announcement
+		</button>
+		<div class="dropdown-menu animated--fade-in" aria-labelledby="dropdownMenuButton">
+			<a class="dropdown-item" href="{{ url_for('page.new_announcement') }}">Announcement</a>
+			<a class="dropdown-item" href="{{ url_for('page.new_writeup') }}">Writeup</a>
+		</div>
+	</div>
+</h1>
+
+<!-- Metadata Card -->
+<div class="row">
+	<div class="col-lg-10">
+		<div class="card shadow mb-4">
+			<div class="card-header py-3">
+				<h6 class="m-0 font-weight-bold">Metadata</h6>
+			</div>
+			<form id="newAnnouncement" action="" method='post'>
+				<div class="card-body d-sm-flex-block">
+					<div class="col-md-12">
+						<div class="small mb-1">Title:</div>
+						<input name="announcementTitle" type="text" class="form-control">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="col-lg-2">
+			<div class="card shadow mb-4">
+				<div class="card-body text-center m-0 p-0">
+					<a href="#" data-toggle="modal" data-target="#previewModal" class="btn btn-info" style="width:100%; border-radius: 0%;">
+						<span class="icon text-white-50">
+							<i class="fas fa-binoculars"></i>
+						</span>
+						<span class="text">Preview Post</span>
+					</a>
+					<a href="{{ url_for('page.dashboard') }}" class="btn btn-danger" style="width:100%; border-radius: 0%;">
+							<span class="icon text-white-50">
+								<i class="fas fa-ban"></i>
+							</span>
+							<span class="text">Cancel</span>
+						</a>
+					<input value="Submit" type="submit" form="newAnnouncement" class="btn btn-primary" style="width:100%; border-radius: 0%;">
+				</div>
+			</div>
+		</div>
+</div>
+<!-- Content Card -->
+<div class="row">
+		<div class="col-lg-10">
+			<div class="card shadow mb-4">
+				<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold">Content</h6>
+				</div>
+				<div class="card-body">
+					<textarea class="text-monospace" name="announcementContent" form="newAnnouncement" style="width: 100%; height: 300px"></textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block modals %}
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+						<h5 class="modal-title" id="previewModalLabel">Post Preview</h5>
+						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">This is not yet implemented. To preview a post, just submit it and edit the post after in the "Announcements" section.</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

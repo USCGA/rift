@@ -1,0 +1,99 @@
+{% extends "rift_base.html" %}
+
+{% block header %}
+<!-- Syntax Highlighting -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/tomorrow-night-bright.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-end mb-0">
+	<a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit fa-sm text-white-50"></i> Edit</a>
+</div>
+<div class="page-body">
+    <div class="card mb-4" style="background-color:transparent; border-color:darkslateblue">
+        <div class="card-body">
+            <div class="text-center d-sm-flex align-items-end justify-content-between">
+                <div class="h1 mb-0 text-gray-800 text-monospace">{{ collection.name }}</div>
+                <div class="pl-4 pr-4 pt-2 pb-1 card bg-gradient-warning" style="background-color:transparent; border-bottom-width:thick; border-color:darkgoldenrod; color:black">
+                    <span class="fas fa-calendar"></span>
+                    <span class="font-weight-bold text-monospace">{{ collection.year }}</span>
+                </div>
+            </div>
+            <hr style="height:1px; background-color:darkslateblue">
+            <div>
+                {{ collection.description }}
+            </div>
+        </div>
+    </div>
+    <div class="h5">Available Writeups:</div>
+    <div class="row">
+        <!-- Collection Card -->
+        % for writeup in writeups
+        <div class="card text-white shadow m-2" style="background-color:darkslateblue; border-bottom-width:thick; border-color:black">
+            <a href="{{ url_for('page.post', id=writeup.id) }}" style="text-decoration: none; color:inherit">
+                <div class="card-body">
+                    <div class="text-white-50 small text-monospace">{{ writeup.category }}</div>
+                    <i class="fas fa-flag mr-1"></i>
+                    {{ writeup.title }}
+                    <div class="text-white-50 small text-monospace text-right">&lt;{{ writeup.author.username }}&gt;</div>
+                </div>
+            </a>
+        </div>
+        % endfor
+    </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editModalLabel">Edit Collection</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+                    <form id="editCollection" action="" method='post'>
+                        <div>Title</div>
+                        <input class="mb-3 form-control" name="collectionName" value="{{ collection.name }}">
+                        <div>Year</div>
+                        <input class="mb-3 form-control" name="collectionYear" value="{{ collection.year }}">
+                        <div>Link</div>
+                        <input class="mb-3 form-control" name="collectionLink" value="{{ collection.link }}">
+                        <div>Description</div>
+                        <textarea class="form-control mb-3" name="collectionDescription" value="{{ collection.description }}"></textarea>
+                    </form>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<input type="submit" class="btn btn-primary" form="editCollection" href="#" value="Done">
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Are you sure you would like to delete this post?</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-danger" href="{{ url_for('page.collection', id=collection.id, delete=True) }}">Delete</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "rift_base.html" %}
+
+{% block content %}
+<!-- Page Heading -->
+<h1 class="h3 mb-4 text-gray-800">
+	Challenge Editor
+</h1>
+
+<!-- Metadata Card -->
+<div class="row">
+	<div class="col-lg-10">
+		<div class="card shadow mb-4">
+			<div class="card-header py-3">
+				<h6 class="m-0 font-weight-bold">Metadata</h6>
+			</div>
+            <form id="newChallenge" enctype=multipart/form-data action="" method='post' class="d-sm-flex p-0">
+                <div class="card-body d-sm-flex-block pr-0 pl-0 ml-2">
+                    <div class="col-md-12">
+                        <div class="small mb-1">Title:</div>
+                        <input name="challengeTitle" type="text" class="form-control" value="{{ challenge.title }}">
+                    </div>
+                </div>
+                <div class="card-body d-sm-flex-block pr-0 pl-0">
+                    <div class="col-md-12">
+                        <div class="small mb-1">Category:</div>
+                        <input name="challengeCategory" type="text" class="form-control" placeholder="e.g. Forensics" value="{{ challenge.category }}">
+                    </div>
+                </div>
+                <div class="card-body d-sm-flex-block pr-0 pl-0">
+                    <div class="col-md-12">
+                        <div class="small mb-1">CTF:</div>
+                        <select class="form-control" name="ctf" type="text">
+							% for ctf in ctfs
+								% if (challenge.ctf.id == ctf.id)
+							<option selected value="{{ ctf.id }}">{{ ctf.name }}</option>
+								% else
+							<option value="{{ ctf.id }}">{{ ctf.name }}</option>
+								% endif
+                            % endfor
+                        </select>
+                    </div>
+				</div>
+				<div class="card-body d-sm-flex-block pr-0 pl-0 mr-2">
+					<div class="col-md-12">
+						<div class="small mb-1">Points:</div>
+						<input name="challengePointValue" type="number" class="form-control" value="{{ challenge.point_value }}" min="0" max="1000">
+					</div>
+				</div>
+            </form>
+		</div>
+	</div>
+	<div class="col-lg-2">
+		<div class="card shadow mb-4">
+			<div class="card-body text-center m-0 p-0">
+				<a href="{{ cancelURL }}" class="btn btn-danger" style="width:100%; border-radius: 0%;">
+						<span class="icon text-white-50">
+							<i class="fas fa-ban"></i>
+						</span>
+						<span class="text">Cancel</span>
+					</a>
+				<input value="Save" type="submit" form="newChallenge" class="btn btn-primary" style="width:100%; border-radius: 0%;">
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Flag Card -->
+<div class="row">
+	<div class="col-md-5">
+		<div class="card bg-gradient-info mb-4" style="border: none">
+			<div class="card-body ">
+				<div class="d-sm-flex align-items-center justify-content-between">
+					<div class="text-white"><i class=" fas fa-align-left fa-flag text-white mr-2"></i>Flag</div>
+					<div class="col-lg">
+						<input type="text" name="challengeFlag" form="newChallenge" class="form-control text-monospace" placeholder="e.g. RIFT{flag}" value="{{ challenge.flag }}">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- Docker Card -->
+	<div class="col-md-5">
+		<div class="card bg-gradient-primary mb-4" style="border: none">
+			<div class="card-body ">
+				<div class="d-sm-flex align-items-center justify-content-between">
+					<div class="text-white"><i class=" fas fa-align-left fa-box text-white mr-2"></i>Docker</div>
+					<div class="col-lg">
+						<input name="flag" type="text" class="form-control text-monospace" placeholder="Docker Features are in development!" disabled>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Files Card -->
+<div class="row">
+	<div class="col-lg-10">
+		<div class="card bg-gradient-primary mb-4" style="border: none">
+			<div class="card-body ">
+				<div class="d-sm-flex align-items-center justify-content-between">
+					<div class="text-white"><i class=" fas fa-align-left fa-files text-white mr-2"></i>Files</div>
+					<div class="col-lg">
+						<input form="newChallenge" type="file" class="text-white" name="challengeFile">
+					</div>
+					<div class="text-xs d-sm-inline-block text-white text-monospace">
+						Max File Size is 32Mb
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Content Card -->
+<div class="row">
+		<div class="col-lg-10">
+			<div class="card shadow mb-4">
+				<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold">Description</h6>
+				</div>
+				<div class="card-body">
+					<textarea class="text-monospace form-control" name="challengeDescription" form="newChallenge" style="width: 100%; height: 90px">{{ challenge.description }}</textarea>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
