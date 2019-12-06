@@ -11,7 +11,7 @@ import rift.user as user
 # import rift.containers as containers
 import rift.uploads as uploads
 import rift.permissions as permissions
-import rift.api as api
+# import rift.api as api
 
 # All routes defined below belong to the "main" blueprint 
 # which is applied to flask.app in __init__.py.
