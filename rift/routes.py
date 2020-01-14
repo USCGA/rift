@@ -82,7 +82,11 @@ def dashboard():
 	# Retrieve latest announcements
 	postsQuerySet = models.Post.objects.order_by('-date').limit(3)
 	postsQuerySet = postsQuerySet(_cls='Post.Announcement')
-	return render_template('rift_dashboard.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet)
+
+	# Retrieve "Creator" Information
+	challengesQuerySet = models.CTFChallenge.objects(author=g.user)
+
+	return render_template('rift_dashboard.html', menu=nav.menu_main, user=g.user, posts=postsQuerySet, challenges=challengesQuerySet)
 
 # Homebrew Page (In house CTF main-page)
 @main.route("/ctf", methods=['GET','POST'])
