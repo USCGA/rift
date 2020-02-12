@@ -1,5 +1,7 @@
 # RIFT
 
+![Docker](https://github.com/USCGA/rift/workflows/Docker/badge.svg?branch=master)
+
 ![banner](https://raw.githubusercontent.com/USCGA/rift/development/documentation/cover.png)
 
 Backend for hub located at <https://uscgacyber.net>.
