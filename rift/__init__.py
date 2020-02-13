@@ -11,13 +11,6 @@ import secrets
 app = Flask(__name__)
 db = rift.db.connection(debug=app.debug)
 
-# Enable the Misaka extension. (Markdown Parser)
-Misaka(app)
-
-# Configure Uploads
-app.config['UPLOADS_DEFAULT_DEST'] = os.path.dirname(os.path.realpath(__file__)) + "/uploads"
-flask_uploads.configure_uploads(app, (rift.uploads.ctf_files, rift.uploads.images))
-
 # Read/Generate secret key.
 try:
 	f = open("secret.key", 'r')
@@ -32,14 +25,18 @@ except FileNotFoundError:
 except:
 	raise
 
+# Enable the Misaka extension. (Markdown Parser)
+Misaka(app)
+
+# Configure Uploads
+app.config['UPLOADS_DEFAULT_DEST'] = os.path.dirname(os.path.realpath(__file__)) + "/uploads"
+flask_uploads.configure_uploads(app, (rift.uploads.ctf_files, rift.uploads.images))
+
 # App Configuration
 app.jinja_env.line_statement_prefix = '%'
 app.config['MAX_CONTENT_LENGTH'] = 2* 16 * 1024 * 1024 # 32 Megabytes
-
-# MongoDB Config
-#app.config['MONGODB_DB'] = 'rift'
-#app.config['MONGODB_HOST'] = 'localhost'
-#app.config['MONGODB_PORT'] = 27017
+app.config['INVITE_CODE_REQUIRED'] = True
+app.config['INVITE_CODE'] = '148dd327d5353e7b3c14e394dede8ab9' # TODO: Replace preshared invite codes.
 
 # Configure Routes
 app.register_blueprint(main)
