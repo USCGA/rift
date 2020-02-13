@@ -1,4 +1,11 @@
 ﻿import mongoengine
 
 print("[i] Connecting to database.")
-connection = mongoengine.connect('rift', host='localhost')
+
+def connection(debug=False):
+	if debug:
+		connection = mongoengine.connect('rift', host='localhost')
+	else:
+		connection = mongoengine.connect('rift', host='mongo')
+
+
