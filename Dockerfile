@@ -1,20 +1,33 @@
-FROM ubuntu:19.04
+#FROM python:alpine3.11
+FROM alpine
 
 LABEL maintainer="richard@richardbew.com"
 
-EXPOSE 5000
+EXPOSE 8000
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
 
 WORKDIR /app
 
-RUN apt-get update -y && \
-    apt-get install -y python3 python3-pip
+RUN apk update
 
-RUN python3 -m pip install -r requirements.txt
+RUN apk add python3 py3-pip
 
-COPY . /app
+RUN apk add --no-cache --virtual .build-deps gcc libffi-dev musl-dev python3-dev \
+     && python3 -m pip install -r requirements.txt \
+     && apk del .build-deps gcc libffi-dev musl-dev python3-dev
+
+#RUN apk update
+# Build tools
+#RUN apk add --no-cache --virtual build-base python3-dev libffi-dev
+# Python
+#RUN apk add python3 py3-pip
+
+#RUN python3 -m pip install -r requirements.txt
+
+COPY ./rift /app/rift
+COPY ./run.py /app
 
 CMD [ "source", "venv/bin/activate" ]
 CMD [ "gunicorn", "--workers=4", "--bind=0.0.0.0:8000", "run:app" ]

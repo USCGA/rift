@@ -1,6 +1,2 @@
+# This file is intended to be accessed by gunicorn and ought not be used. Start with `run_dev.py` instead.
 from rift import app
-
-print("[i] Starting Rift.")
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')

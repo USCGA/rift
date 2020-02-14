@@ -276,11 +276,16 @@ def login():
 				return render_template('login.html')
 	# GET
 	if request.method == 'GET':
-		return render_template('login.html')
+		return render_template('login.html', invite_code_required=app.config['INVITE_CODE_REQUIRED'])
 
 # Register Page
 @main.route("/register", methods=['GET','POST'])
 def register():
+	if app.config['INVITE_CODE_REQUIRED']:
+		code = request.args.get('code', default=None, type=str)
+		if (code is None or code != app.config['INVITE_CODE']):
+			flash("Invite code required.")
+			return redirect(url_for('page.home'))
 	if g.user is not None:
 		return redirect(url_for('page.dashboard'))
 	# POST
