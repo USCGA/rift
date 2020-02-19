@@ -24,6 +24,10 @@ riftenv/
 
 # App Secret
 secret.key
+invite_code.txt
 
 # Production
 wsgi.py
+
+# Cache
+__pycache__/

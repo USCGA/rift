@@ -318,7 +318,7 @@ def logout():
 
 @main.route("/admin/status")
 def rift_status():
-	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, mongo_isRunning="Not Implemented", containers=["Not Implemented"])
+	return render_template('rift_status.html', menu=nav.menu_main, user=g.user, invite_code=app.config['INVITE_CODE'], mongo_isRunning="Not Implemented", containers=["Not Implemented"])
 
 # Rift Admin User Page
 # TODO: This is neigh unreadable. There must be a better way to go about this.
