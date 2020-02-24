@@ -1,7 +1,7 @@
 from collections.abc import Mapping
 #TODO: This is wonky. Look for a better way to store permissions structure.
 
-class Permission: 
+class Permission:
 	def __init__(self, tag, description):
 		self.tag = tag
 		self.description = description
@@ -21,6 +21,7 @@ class Role:
 		else:
 			return False
 
+	@staticmethod
 	def Get(roleName: str):
 		try:
 			return Role.__roles[roleName]
@@ -28,6 +29,7 @@ class Role:
 			print("[!] There is no role by the name of '" + roleName + "'. Returning guest role.")
 			return Role("Guest", {})
 
+	@staticmethod
 	def List():
 		return Role.__roles
 		

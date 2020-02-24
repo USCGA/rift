@@ -46,15 +46,13 @@ def GetUserObject(session):
 	else:
 		return False
 
-""" Depreciated
 def GetRole(user):
 	userDocument = models.User.objects.only('role').get(id=user.id)
 	userRole = userDocument.role
-	if (userRole in permissions.Roles.keys):
+	if (userRole in permissions.Role.List()):
 		return userRole
 	else:
-		raise Exception("Attempted to get an undefined role. Role must exist in rift.permissions: {}".format(userRole))
-"""
+		raise Exception("Attempted to get an undefined role. Role must exist in rift.permissions: %s" % userRole)
 
 def HasPermission(user, permission : permissions.Permission):
 	userDocument = models.User.objects.only('role').get(id=user.id)
