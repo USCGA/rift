@@ -4,7 +4,7 @@ from flask_misaka import Misaka
 from rift.routes import main
 import flask_uploads
 import rift.db
-#import rift.containers
+#import rift.containers # TODO: Docker integration
 import rift.uploads
 import secrets
 
@@ -22,12 +22,23 @@ flask_uploads.configure_uploads(app, (rift.uploads.ctf_files, rift.uploads.image
 app.jinja_env.line_statement_prefix = '%'
 app.config['MAX_CONTENT_LENGTH'] = 2 * 16 * 1024 * 1024 # 32 Megabytes
 app.config['INVITE_CODE_REQUIRED'] = True
-app.config['INVITE_CODE'] = secrets.token_hex(16)
+app.config['INVITE_CODE'] = secrets.token_hex(16) # Invite code changes every startup
+
+# Read app secret from secret.key file
+# If file DNE, create it and generate secret.
+try:
+	with open('secret.key', 'r') as keyfile:
+		app.config['SECRET_KEY'] = keyfile.read()
+except FileNotFoundError:
+	print("[i] 'secret.key' not found. Generating new key.")
+	with open('secret.key', 'w+') as keyfile:
+		app.config['SECRET_KEY'] = secrets.token_hex(16)
+		keyfile.write(app.config['SECRET_KEY'])
+
 if app.debug:
-	app.config['SECRET_KEY'] = "replaceme"
 	print("[i] Invite Code: %s" % app.config['INVITE_CODE'])
-else:
-	app.config['SECRET_KEY'] = secrets.token_hex(16)
+	print("[i] Secret Key: %s" % app.config['SECRET_KEY'])
+		
 
 # Configure Routes
 app.register_blueprint(main)
