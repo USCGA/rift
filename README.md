@@ -6,7 +6,7 @@
 
 Backend for hub located at <https://uscgacyber.net>.
 
-In development. Limited instructions.
+Limited instructions.
 
 ### Setting up:
 
