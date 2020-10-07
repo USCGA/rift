@@ -14,9 +14,9 @@ RUN apk update
 
 RUN apk add python3 py3-pip
 
-RUN apk add --no-cache --virtual .build-deps gcc libffi-dev musl-dev python3-dev \
+RUN apk add --no-cache --virtual .build-deps gcc libffi-dev musl-dev python3-dev py3-wheel \
      && python3 -m pip install -r requirements.txt \
-     && apk del .build-deps gcc libffi-dev musl-dev python3-dev
+     && apk del .build-deps gcc libffi-dev musl-dev python3-dev py3-wheel
 
 #RUN apk update
 # Build tools
